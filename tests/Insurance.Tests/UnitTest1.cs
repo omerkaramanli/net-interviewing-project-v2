@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Insurance.Api.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -71,7 +72,7 @@ namespace Insurance.Tests
 
             var dto = new HomeController.InsuranceDto
             {
-                ProductId = 1, //Dont have one yet
+                ProductId = -1, //Dont have one yet
                 ProductTypeName = "Washing machines",
                 SalesPrice = 2500,
                 ProductTypeHasInsurance = true,
@@ -141,8 +142,8 @@ namespace Insurance.Tests
 
             var dto = new HomeController.InsuranceDto
             {
-                ProductId = 1, //Dont have one yet
-                ProductTypeName = "Smartphone",
+                ProductId = -1, //Dont have one yet
+                ProductTypeName = "Smartphones",
                 SalesPrice = 2500,
                 ProductTypeHasInsurance = true,
                 InsuranceValue = 2500
@@ -224,6 +225,274 @@ namespace Insurance.Tests
                 actual: result.InsuranceValue
                 );
         }
+
+        [Fact]
+        public void CalculateInsurance_GivenSalesPriceBelow500EurosAndCantBeInsuredOrder_ShouldRequireNoInsurance()
+        {
+            //Arrange
+            const float expectedInsuranceValue = 0;
+
+            var dto = new List<HomeController.InsuranceDto>();
+            dto.Add(new HomeController.InsuranceDto { ProductId = 819148 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 836676 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 832845 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 725435 });
+
+            //Act
+            var sut = new HomeController();
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: expectedInsuranceValue,
+                actual: result
+                );
+        }
+
+        [Fact]
+        public void CalculateInsurance_GivenSalesPriceBetween500and2000EurosAndCantBeInsuredOrder_ShouldRequireNoInsurance()
+        {
+            //Arrange
+            const float expectedInsuranceValue = 0;
+
+            var dto = new List<HomeController.InsuranceDto>();
+            dto.Add(new HomeController.InsuranceDto { ProductId = 838978 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 838978 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 838978 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 838978 });
+
+            //Act
+            var sut = new HomeController();
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: expectedInsuranceValue,
+                actual: result
+                );
+        }
+
+        [Fact]
+        public void CalculateInsurance_GivenSalesPriceAbove2000EurosAndCantBeInsuredOrder_ShouldRequireNoInsurance()
+        {
+            //Arrange
+            const float expectedInsuranceValue = 0;
+
+            var dto = new List<HomeController.InsuranceDto>();
+            dto.Add(new HomeController.InsuranceDto { ProductId = 735296 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 735296 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 735296 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 735296 });
+
+            //Act
+            var sut = new HomeController();
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: expectedInsuranceValue,
+                actual: result
+                );
+        }
+              
+        [Fact]
+        public void CalculateInsurance_GivenSalesPriceBelow500EurosOrder_ShouldRequireNoInsurance()
+        {
+            //Arrange
+            const float expectedInsuranceValue = 0;
+
+            var dto = new List<HomeController.InsuranceDto>();
+            dto.Add(new HomeController.InsuranceDto { ProductId = 572770 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 805073 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 780829 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 715990 });
+
+            //Act
+            var sut = new HomeController();
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: expectedInsuranceValue,
+                actual: result
+                );
+        }
+
+        [Fact]
+        public void CalculateInsurance_GivenSalesPriceBetween500and2000EurosOrder_ShouldAddXTimes1000ToInsurance()
+        {
+            //Arrange
+            const float expectedInsuranceValue = 4000;
+
+            var dto = new List<HomeController.InsuranceDto>();
+            dto.Add(new HomeController.InsuranceDto { ProductId = 735246 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 836194 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 735246 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 836194 });
+
+            //Act
+            var sut = new HomeController();
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: expectedInsuranceValue,
+                actual: result
+                );
+        }
+
+        [Fact]
+        public void CalculateInsurance_GivenSalesPriceAbove2000EurosOrder_ShouldAddXTimes2000ToInsurance()
+        {
+            //Arrange
+            const float expectedInsuranceValue = 8000;
+
+            var dto = new List<HomeController.InsuranceDto>();
+            dto.Add(new HomeController.InsuranceDto
+            {
+                ProductId = -1, //Dont have one yet
+                ProductTypeName = "Washing machines",
+                SalesPrice = 2000,
+                ProductTypeHasInsurance = true,
+                InsuranceValue = 2000
+            });
+            dto.Add(new HomeController.InsuranceDto
+            {
+                ProductId = -2, //Dont have one yet
+                ProductTypeName = "Washing machines",
+                SalesPrice = 2100,
+                ProductTypeHasInsurance = true,
+                InsuranceValue = 2000
+            });
+            dto.Add(new HomeController.InsuranceDto
+            {
+                ProductId = -3, //Dont have one yet
+                ProductTypeName = "Washing machines",
+                SalesPrice = 2200,
+                ProductTypeHasInsurance = true,
+                InsuranceValue = 2000
+            });
+            dto.Add(new HomeController.InsuranceDto
+            {
+                ProductId = -4, //Dont have one yet
+                ProductTypeName = "Washing machines",
+                SalesPrice = 2300,
+                ProductTypeHasInsurance = true,
+                InsuranceValue = 2000
+            });
+
+            //Act
+            var sut = new HomeController();
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: expectedInsuranceValue,
+                actual: result
+                );
+        }
+
+        [Fact]
+        public void CalculateInsurance_GivenSalesPriceBelow500EurosAndSmartphoneOrLaptopOrder_ShouldAddYTimes500ToInsurance()
+        {
+            //Arrange
+            const float expectedInsuranceValue = 2000;
+
+            var dto = new List<HomeController.InsuranceDto>();
+            dto.Add(new HomeController.InsuranceDto { ProductId = 828519 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 837856 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 828519 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 837856 });
+
+            //Act
+            var sut = new HomeController();
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: expectedInsuranceValue,
+                actual: result
+                );
+        }
+
+        [Fact]
+        public void CalculateInsurance_GivenSalesPriceBetween500and2000EurosAndSmartphoneOrLaptopOrder_ShouldAddXTimes1000PlusYTimes500ToInsurance()
+        {
+            //Arrange
+            const float expectedInsuranceValue = 6000;
+
+            var dto = new List<HomeController.InsuranceDto>();
+            dto.Add(new HomeController.InsuranceDto { ProductId = 827074 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 858421 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 859366 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 861866 });
+
+            //Act
+            var sut = new HomeController();
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: expectedInsuranceValue,
+                actual: result
+                );
+        }
+
+        [Fact]
+        public void CalculateInsurance_GivenSalesPriceAbove2000EurosAndSmartphoneOrLaptopOrder_ShouldAddXTimes2000PlusYTimes500ToInsurance()
+        {
+            //Arrange
+            const float expectedInsuranceValue = 10000;
+
+            var dto = new List<HomeController.InsuranceDto>();
+            dto.Add(new HomeController.InsuranceDto
+            {
+                ProductId = -1, //Dont have one yet
+                ProductTypeName = "Smartphones",
+                SalesPrice = 2000,
+                ProductTypeHasInsurance = true,
+                InsuranceValue = 2500
+            });
+            dto.Add(new HomeController.InsuranceDto
+            {
+                ProductId = -2, //Dont have one yet
+                ProductTypeName = "Laptops",
+                SalesPrice = 2100,
+                ProductTypeHasInsurance = true,
+                InsuranceValue = 2500
+            });
+            dto.Add(new HomeController.InsuranceDto
+            {
+                ProductId = -3, //Dont have one yet
+                ProductTypeName = "Smartphones",
+                SalesPrice = 2200,
+                ProductTypeHasInsurance = true,
+                InsuranceValue = 2500
+            });
+            dto.Add(new HomeController.InsuranceDto
+            {
+                ProductId = -4, //Dont have one yet
+                ProductTypeName = "Laptops",
+                SalesPrice = 2300,
+                ProductTypeHasInsurance = true,
+                InsuranceValue = 2500
+            });
+
+            //Act
+            var sut = new HomeController();
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: expectedInsuranceValue,
+                actual: result
+                );
+        }
+
+        //ToDo: add unit tests for range of items in an order
+
+        //ToDo: add unit tests for task 4
+
     }
 
     /*public class ControllerTestFixture : IDisposable
