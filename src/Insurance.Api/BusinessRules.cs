@@ -13,20 +13,26 @@ namespace Insurance.Api
     {
         public static void GetProductType(string baseAddress, ref HomeController.InsuranceDto insurance) //productId
         {
-            HttpClient client = new HttpClient{ BaseAddress = new Uri(baseAddress)};
+            HttpClient client = new HttpClient { BaseAddress = new Uri(baseAddress) };
             //string json = client.GetAsync("/product_types").Result.Content.ReadAsStringAsync().Result;
             //var collection = JsonConvert.DeserializeObject<dynamic>(json);
             //instead of searching whole collection, we can just use product_types/{id}
+            try
+            {
+                string json = client.GetAsync(string.Format("/products/{0:G}", insurance.ProductId)).Result.Content.ReadAsStringAsync().Result;
+                var product = JsonConvert.DeserializeObject<dynamic>(json);
 
-            string json = client.GetAsync(string.Format("/products/{0:G}", insurance.ProductId)).Result.Content.ReadAsStringAsync().Result;
-            var product = JsonConvert.DeserializeObject<dynamic>(json);
+                json = client.GetAsync(string.Format("/product_types/{0:G}", product.productTypeId)).Result.Content.ReadAsStringAsync().Result;
+                var productType = JsonConvert.DeserializeObject<dynamic>(json);
 
-            json = client.GetAsync(string.Format("/product_types/{0:G}", product.productTypeId)).Result.Content.ReadAsStringAsync().Result;
-            var productType = JsonConvert.DeserializeObject<dynamic>(json);
-
-            insurance.ProductTypeName = productType.name;
-            insurance.ProductTypeHasInsurance = productType.canBeInsured;
-            
+                insurance.ProductTypeName = productType.name;
+                insurance.ProductTypeHasInsurance = productType.canBeInsured;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception("Product type could not be found or product does not exist.", ex.InnerException);
+            }
 
 
             //int productTypeId = product.productTypeId;
@@ -49,11 +55,19 @@ namespace Insurance.Api
 
         public static void GetSalesPrice(string baseAddress, ref HomeController.InsuranceDto insurance) //productId
         {
-            HttpClient client = new HttpClient{ BaseAddress = new Uri(baseAddress)};
-            string json = client.GetAsync(string.Format("/products/{0:G}", insurance.ProductId)).Result.Content.ReadAsStringAsync().Result;
-            var product = JsonConvert.DeserializeObject<dynamic>(json);
+            try
+            {
+                HttpClient client = new HttpClient { BaseAddress = new Uri(baseAddress) };
+                string json = client.GetAsync(string.Format("/products/{0:G}", insurance.ProductId)).Result.Content.ReadAsStringAsync().Result;
+                var product = JsonConvert.DeserializeObject<dynamic>(json);
 
-            insurance.SalesPrice = product.salesPrice;
+                insurance.SalesPrice = product.salesPrice;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception("Sales price could not be found.", ex.InnerException);
+            }
         }
     }
 }

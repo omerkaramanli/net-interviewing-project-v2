@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json.Serialization;
@@ -12,22 +13,30 @@ namespace Insurance.Api.Controllers
         public InsuranceDto CalculateInsurance([FromBody] InsuranceDto toInsure)
         {
             //int productId = toInsure.ProductId;
+            try
+            {
+                BusinessRules.GetProductType(ProductApi, ref toInsure);
+                BusinessRules.GetSalesPrice(ProductApi, ref toInsure);
 
-            BusinessRules.GetProductType(ProductApi, ref toInsure);
-            BusinessRules.GetSalesPrice(ProductApi, ref toInsure);
+                //float insurance = 0f;
 
-            //float insurance = 0f;
-
-            //simplified the if else block
-            toInsure.InsuranceValue = 0;
-            if (toInsure.SalesPrice > 500 && toInsure.SalesPrice < 2000 && toInsure.ProductTypeHasInsurance)
-                toInsure.InsuranceValue += 1000;
-            if (toInsure.SalesPrice >= 2000 && toInsure.ProductTypeHasInsurance)
-                toInsure.InsuranceValue += 2000;
-            if (toInsure.ProductTypeName == "Laptops" || toInsure.ProductTypeName == "Smartphones" && toInsure.ProductTypeHasInsurance)
-                toInsure.InsuranceValue += 500;
-
-            return toInsure;
+                //simplified the if else block
+                toInsure.InsuranceValue = 0;
+                if (toInsure.SalesPrice > 500 && toInsure.SalesPrice < 2000 && toInsure.ProductTypeHasInsurance)
+                    toInsure.InsuranceValue += 1000;
+                if (toInsure.SalesPrice >= 2000 && toInsure.ProductTypeHasInsurance)
+                    toInsure.InsuranceValue += 2000;
+                if (toInsure.ProductTypeName == "Laptops" || toInsure.ProductTypeName == "Smartphones" && toInsure.ProductTypeHasInsurance)
+                    toInsure.InsuranceValue += 500;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            if (toInsure != null)
+                return toInsure;
+            else
+                throw new Exception("Insurance value could not be found");
         }
 
         public class InsuranceDto

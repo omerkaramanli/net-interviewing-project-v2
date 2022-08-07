@@ -42,7 +42,7 @@ namespace Insurance.Tests
         }
 
         [Fact]
-        public void CalculateInsurance_GivenSalesPriceBetween500And2000Euros_ShouldAddThousandEurosToInsuranceCost()
+        public void CalculateInsurance_GivenSalesPriceBetween500And2000Euros_ShouldAdd1000EurosToInsuranceCost()
         {
             //Arrange
             const float expectedInsuranceValue = 1000;
@@ -71,7 +71,11 @@ namespace Insurance.Tests
 
             var dto = new HomeController.InsuranceDto
             {
-                ProductId = 735296,//Dont have one yet
+                ProductId = 1, //Dont have one yet
+                ProductTypeName = "Washing machines",
+                SalesPrice = 2500,
+                ProductTypeHasInsurance = true,
+                InsuranceValue = 2000
             };
 
             //Act
@@ -81,7 +85,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: 2000//result.InsuranceValue
+                actual: result.InsuranceValue
                 );
         }
 
@@ -108,7 +112,7 @@ namespace Insurance.Tests
         }
 
         [Fact]
-        public void CalculateInsurance_GivenSalesPriceBetween500And2000EurosAndSmartphoneOrLaptop_ShouldAdd500EurosToInsuranceCost()
+        public void CalculateInsurance_GivenSalesPriceBetween500And2000EurosAndSmartphoneOrLaptop_ShouldAdd1500EurosToInsuranceCost()
         {
             //Arrange
             const float expectedInsuranceValue = 1500;
@@ -130,14 +134,18 @@ namespace Insurance.Tests
         }
 
         [Fact]
-        public void CalculateInsurance_GivenSalesPriceAbove2000EurosAndSmartphoneOrLaptop_ShouldAdd500EurosToInsuranceCost()
+        public void CalculateInsurance_GivenSalesPriceAbove2000EurosAndSmartphoneOrLaptop_ShouldAdd2500EurosToInsuranceCost()
         {
             //Arrange
             const float expectedInsuranceValue = 2500;
 
             var dto = new HomeController.InsuranceDto
             {
-                ProductId = 837856, //Dont have one yet
+                ProductId = 1, //Dont have one yet
+                ProductTypeName = "Smartphone",
+                SalesPrice = 2500,
+                ProductTypeHasInsurance = true,
+                InsuranceValue = 2500
             };
 
             //Act
@@ -147,12 +155,12 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: 2500//result.InsuranceValue
+                actual: result.InsuranceValue
                 );
         }
 
         [Fact]
-        public void CalculateInsurance_GivenSalesPriceBelow500EurosAndCantBeInsured_ShouldNotAddToInsuranceCost()
+        public void CalculateInsurance_GivenSalesPriceBelow500EurosAndCantBeInsured_ShouldRequireNoInsurance()
         {
             //Arrange
             const float expectedInsuranceValue = 0;
@@ -174,7 +182,7 @@ namespace Insurance.Tests
         }
 
         [Fact]
-        public void CalculateInsurance_GivenSalesPriceBetween500And2000EurosAndCantBeInsured_ShouldNotAddToInsuranceCost()
+        public void CalculateInsurance_GivenSalesPriceBetween500And2000EurosAndCantBeInsured_ShouldRequireNoInsurance()
         {
             //Arrange
             const float expectedInsuranceValue = 0;
@@ -196,7 +204,7 @@ namespace Insurance.Tests
         }
 
         [Fact]
-        public void CalculateInsurance_GivenSalesPriceAbove2000EurosAndCantBeInsured_ShouldNotAddToInsuranceCost()
+        public void CalculateInsurance_GivenSalesPriceAbove2000EurosAndCantBeInsured_ShouldRequireNoInsurance()
         {
             //Arrange
             const float expectedInsuranceValue = 0;
