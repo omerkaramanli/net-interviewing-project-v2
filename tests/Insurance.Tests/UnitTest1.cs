@@ -304,8 +304,8 @@ namespace Insurance.Tests
             var dto = new List<HomeController.InsuranceDto>();
             dto.Add(new HomeController.InsuranceDto { ProductId = 572770 });
             dto.Add(new HomeController.InsuranceDto { ProductId = 805073 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 780829 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 715990 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 572770 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 805073 });
 
             //Act
             var sut = new HomeController();
@@ -326,9 +326,9 @@ namespace Insurance.Tests
 
             var dto = new List<HomeController.InsuranceDto>();
             dto.Add(new HomeController.InsuranceDto { ProductId = 735246 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 836194 });
             dto.Add(new HomeController.InsuranceDto { ProductId = 735246 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 836194 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 735246 });
+            dto.Add(new HomeController.InsuranceDto { ProductId = 735246 });
 
             //Act
             var sut = new HomeController();
