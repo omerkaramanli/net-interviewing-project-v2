@@ -12,12 +12,12 @@ using Serilog;
 namespace Insurance.Api
 {
     public static class BusinessRules
-    {        
+    {
         public static void GetProductType(string baseAddress, ref HomeController.InsuranceDto insurance) //productId
         {
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.File("Logs/logs.txt", rollingInterval: RollingInterval.Day)
+                .MinimumLevel.Information()
+                .WriteTo.File("Logs/logs.txt", rollingInterval: RollingInterval.Day, shared: true)
                 .CreateLogger();
             HttpClient client = new HttpClient { BaseAddress = new Uri(baseAddress) };
             //string json = client.GetAsync("/product_types").Result.Content.ReadAsStringAsync().Result;
@@ -34,6 +34,7 @@ namespace Insurance.Api
 
                 insurance.ProductTypeName = productType.name;
                 insurance.ProductTypeHasInsurance = productType.canBeInsured;
+                Log.Information($"Getting product type {{ProductId = {insurance.ProductId}}} completed.");
             }
             catch (Exception ex)
             {
@@ -41,7 +42,6 @@ namespace Insurance.Api
                 throw new Exception($"Product type for {{ProductId = {insurance.ProductId}}} could not be found or product does not exist.");
             }
 
-            Log.Information($"Getting product type {{ProductId = {insurance.ProductId}}} completed.");
 
             //int productTypeId = product.productTypeId;
             //string productTypeName = null;
@@ -64,8 +64,8 @@ namespace Insurance.Api
         public static void GetSalesPrice(string baseAddress, ref HomeController.InsuranceDto insurance) //productId
         {
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.File("Logs/logs.txt", rollingInterval: RollingInterval.Day)
+                .MinimumLevel.Information()
+                .WriteTo.File("Logs/logs.txt", rollingInterval: RollingInterval.Day, shared: true)
                 .CreateLogger();
             try
             {
@@ -75,13 +75,13 @@ namespace Insurance.Api
                 var product = JsonConvert.DeserializeObject<dynamic>(json);
 
                 insurance.SalesPrice = product.salesPrice;
+                Log.Information($"Getting product sales price {{ProductId = {insurance.ProductId}}} completed.");
             }
             catch (Exception ex)
             {
                 Log.Error(ex.Message);
                 throw new Exception($"Sales price for {{ProductId = {insurance.ProductId}}} could not be found.");
             }
-            Log.Information($"Getting product sales price {{ProductId = {insurance.ProductId}}} completed.");
 
         }
     }
