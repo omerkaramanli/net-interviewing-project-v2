@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Insurance.Api
 {
@@ -18,6 +19,11 @@ namespace Insurance.Api
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.File("Logs/logs.txt", rollingInterval: RollingInterval.Day, shared: true)
+                .CreateLogger();
         }
 
         public IConfiguration Configuration { get; }

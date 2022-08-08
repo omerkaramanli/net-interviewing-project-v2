@@ -15,10 +15,10 @@ namespace Insurance.Api
     {
         public static void GetProductType(string baseAddress, ref HomeController.InsuranceDto insurance) //productId
         {
-            Log.Logger = new LoggerConfiguration()
+            /*Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .WriteTo.File("Logs/logs.txt", rollingInterval: RollingInterval.Day, shared: true)
-                .CreateLogger();
+                .CreateLogger();*/
             HttpClient client = new HttpClient { BaseAddress = new Uri(baseAddress) };
             //string json = client.GetAsync("/product_types").Result.Content.ReadAsStringAsync().Result;
             //var collection = JsonConvert.DeserializeObject<dynamic>(json);
@@ -63,10 +63,10 @@ namespace Insurance.Api
 
         public static void GetSalesPrice(string baseAddress, ref HomeController.InsuranceDto insurance) //productId
         {
-            Log.Logger = new LoggerConfiguration()
+            /*Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .WriteTo.File("Logs/logs.txt", rollingInterval: RollingInterval.Day, shared: true)
-                .CreateLogger();
+                .CreateLogger();*/
             try
             {
                 Log.Information($"Getting product sales price {{ProductId = {insurance.ProductId}}} started.");

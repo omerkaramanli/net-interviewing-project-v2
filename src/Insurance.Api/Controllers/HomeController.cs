@@ -15,10 +15,10 @@ namespace Insurance.Api.Controllers
         [Route("api/insurance/product")]
         public InsuranceDto CalculateInsurance([FromBody] InsuranceDto toInsure)
         {
-            Log.Logger = new LoggerConfiguration()
+            /*Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .WriteTo.File("/Logs/logs.txt", rollingInterval: RollingInterval.Day, shared: true)
-                .CreateLogger();
+                .WriteTo.File("Logs/logs.txt", rollingInterval: RollingInterval.Day, shared: true)
+                .CreateLogger();*/
 
             //int productId = toInsure.ProductId;
             try
@@ -58,10 +58,10 @@ namespace Insurance.Api.Controllers
 
         public float CalculateInsurance([FromBody] List<InsuranceDto> toInsure)
         {
-            Log.Logger = new LoggerConfiguration()
+            /*Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .WriteTo.File("/Logs/logs.txt", rollingInterval: RollingInterval.Day, shared: true)
-                .CreateLogger();
+                .WriteTo.File("Logs/logs.txt", rollingInterval: RollingInterval.Day, shared: true)
+                .CreateLogger();*/
             float insurance = 0f;
             int countOfDigitalCameras = 0;
 
