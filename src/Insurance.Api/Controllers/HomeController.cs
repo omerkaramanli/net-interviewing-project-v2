@@ -4,6 +4,8 @@ using System.Net;
 using System.Net.Http;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
+//using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Insurance.Api.Controllers
 {
@@ -13,9 +15,16 @@ namespace Insurance.Api.Controllers
         [Route("api/insurance/product")]
         public InsuranceDto CalculateInsurance([FromBody] InsuranceDto toInsure)
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.File("../Logs/logs.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
             //int productId = toInsure.ProductId;
             try
             {
+
+                Log.Information($"Calculation of insurance for {{ProductId = {toInsure.ProductId}}} started.");
                 BusinessRules.GetProductType(ProductApi, ref toInsure);
                 BusinessRules.GetSalesPrice(ProductApi, ref toInsure);
 
@@ -29,42 +38,54 @@ namespace Insurance.Api.Controllers
                         toInsure.InsuranceValue += 1000;
                     if (toInsure.SalesPrice >= 2000)
                         toInsure.InsuranceValue += 2000;
-                    if (toInsure.ProductTypeName == "Laptops" || toInsure.ProductTypeName == "Smartphones")
+                    if (toInsure.ProductTypeName == "Laptops" || toInsure.ProductTypeName == "Smartphones" || toInsure.ProductTypeName == "Digital cameras")
                         toInsure.InsuranceValue += 500;
                 }
+                Log.Information($"Calculation of insurance for {{ProductId = {toInsure.ProductId}}} completed.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error($"Insurance value of {{ProductId = {toInsure.ProductId}}} could not be calculated\n{ex.Message}");
+                //throw new Exception($"Insurance value of {{ProductId = {toInsure.ProductId}}} could not be calculated");
             }
             if (toInsure != null)
+            {
                 return toInsure;
-            else
-                throw new Exception("Insurance value could not be calculated");
+            }
+            else //???
+                throw new Exception($"Insurance value of {{ProductId = {toInsure.ProductId}}} could not be calculated");
         }
 
         public float CalculateInsurance([FromBody] List<InsuranceDto> toInsure)
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.File("../Logs/logs.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
             float insurance = 0f;
-            bool atLeastOneDigitalCamera = false;
+            int countOfDigitalCameras = 0;
 
             try
             {
+                Log.Information($"Calculation of insurance for an order started. Count of products in the order: {toInsure.Count}");
                 for (int i = 0; i < toInsure.Count; i++)
                 {
                     CalculateInsurance(toInsure[i]);
-                    if (toInsure[i].ProductTypeName == "Digital cameras") atLeastOneDigitalCamera = true;
+                    if (toInsure[i].ProductTypeName == "Digital cameras") countOfDigitalCameras++;
                     insurance += toInsure[i].InsuranceValue;
                 }
-                if (atLeastOneDigitalCamera) insurance += 500;
+                if (countOfDigitalCameras > 0) insurance -= (countOfDigitalCameras - 1) * 500;
+
+                Log.Information($"Calculation of insurance for an order completed.");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                throw new Exception("Insurance of one or more items could not be calculated");
+                Log.Error($"Insurance of one or more items could not be calculated \n{ex.Message}");
+                //throw new Exception("Insurance of one or more items could not be calculated");
             }
 
             return insurance;
+
         }
 
         public class InsuranceDto

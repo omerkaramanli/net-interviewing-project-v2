@@ -50,7 +50,7 @@ namespace Insurance.Tests
 
             var dto = new HomeController.InsuranceDto
             {
-                ProductId = 836194,
+                ProductId = 735246,
             };
 
             //Act
@@ -531,15 +531,57 @@ namespace Insurance.Tests
 
         //ToDo: add unit tests for task 4
         [Fact]
+        public void CalculateInsurance_GivenOneDigitalCameraBelow500Euros_ShouldAdd500ToInsurance()
+        {
+            //Arrange
+            const float expectedInsuranceValue = 500;
+
+            var dto = new HomeController.InsuranceDto
+            {
+                ProductId = 715990,
+            };
+
+            //Act
+            var sut = new HomeController();
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: expectedInsuranceValue,
+                actual: result.InsuranceValue
+                );
+        }
+        [Fact]
+        public void CalculateInsurance_GivenOneDigitalCameraBetween500and2000Euros_ShouldAdd1500ToInsurance()
+        {
+            //Arrange
+            const float expectedInsuranceValue = 1500;
+
+            var dto = new HomeController.InsuranceDto
+            {
+                ProductId = 836194,
+            };
+
+            //Act
+            var sut = new HomeController();
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: expectedInsuranceValue,
+                actual: result.InsuranceValue
+                );
+        }
+        [Fact]
         public void CalculateInsurance_GivenAtLEastOneDigitalCameraInOrder_ShouldAdd1500Plus500ToInsurance()
         {
             //Arrange
-            const float expectedInsuranceValue = 1000;
+            const float expectedInsuranceValue = 2000;
 
             var dto = new List<HomeController.InsuranceDto>();
             dto.Add(new HomeController.InsuranceDto { ProductId = 837856 }); //500
             dto.Add(new HomeController.InsuranceDto { ProductId = 715990 }); //0 + digital camera 500
-            dto.Add(new HomeController.InsuranceDto { ProductId = 725435 }); //0
+            dto.Add(new HomeController.InsuranceDto { ProductId = 836194 }); //1000 digital camera
             dto.Add(new HomeController.InsuranceDto { ProductId = 572770 }); //0
 
             //Act

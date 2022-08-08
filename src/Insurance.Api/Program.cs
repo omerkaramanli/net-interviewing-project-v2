@@ -21,6 +21,10 @@ namespace Insurance.Api
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                })
+                .ConfigureLogging((context, logging) =>
+                {
+                    logging.AddConsole();
                 });
     }
 }

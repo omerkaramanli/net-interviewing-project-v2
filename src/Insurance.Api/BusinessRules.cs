@@ -6,19 +6,26 @@ using System.Net.Http;
 using Insurance.Api.Controllers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+//using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Insurance.Api
 {
     public static class BusinessRules
-    {
+    {        
         public static void GetProductType(string baseAddress, ref HomeController.InsuranceDto insurance) //productId
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.File("Logs/logs.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
             HttpClient client = new HttpClient { BaseAddress = new Uri(baseAddress) };
             //string json = client.GetAsync("/product_types").Result.Content.ReadAsStringAsync().Result;
             //var collection = JsonConvert.DeserializeObject<dynamic>(json);
             //instead of searching whole collection, we can just use product_types/{id}
             try
             {
+                Log.Information($"Getting product type {{ProductId = {insurance.ProductId}}} started.");
                 string json = client.GetAsync(string.Format("/products/{0:G}", insurance.ProductId)).Result.Content.ReadAsStringAsync().Result;
                 var product = JsonConvert.DeserializeObject<dynamic>(json);
 
@@ -30,10 +37,11 @@ namespace Insurance.Api
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                throw new Exception("Product type could not be found or product does not exist.", ex.InnerException);
+                Log.Error(ex.Message);
+                throw new Exception($"Product type for {{ProductId = {insurance.ProductId}}} could not be found or product does not exist.");
             }
 
+            Log.Information($"Getting product type {{ProductId = {insurance.ProductId}}} completed.");
 
             //int productTypeId = product.productTypeId;
             //string productTypeName = null;
@@ -55,8 +63,13 @@ namespace Insurance.Api
 
         public static void GetSalesPrice(string baseAddress, ref HomeController.InsuranceDto insurance) //productId
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.File("Logs/logs.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
             try
             {
+                Log.Information($"Getting product sales price {{ProductId = {insurance.ProductId}}} started.");
                 HttpClient client = new HttpClient { BaseAddress = new Uri(baseAddress) };
                 string json = client.GetAsync(string.Format("/products/{0:G}", insurance.ProductId)).Result.Content.ReadAsStringAsync().Result;
                 var product = JsonConvert.DeserializeObject<dynamic>(json);
@@ -65,9 +78,11 @@ namespace Insurance.Api
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                throw new Exception("Sales price could not be found.", ex.InnerException);
+                Log.Error(ex.Message);
+                throw new Exception($"Sales price for {{ProductId = {insurance.ProductId}}} could not be found.");
             }
+            Log.Information($"Getting product sales price {{ProductId = {insurance.ProductId}}} completed.");
+
         }
     }
 }
