@@ -490,9 +490,68 @@ namespace Insurance.Tests
         }
 
         //ToDo: add unit tests for range of items in an order
+        [Fact]
+        public void CalculateInsurance_GivenOneOfEachTypeOfItemInOrder_ShouldAdd6500ToInsurance()
+        {
+            //Arrange
+            const float expectedInsuranceValue = 6500;
+
+            var dto = new List<HomeController.InsuranceDto>();
+
+            //Type 21 can be insured <500 // 500-2000 -Laptops
+            dto.Add(new HomeController.InsuranceDto { ProductId = 837856 }); //500
+            dto.Add(new HomeController.InsuranceDto { ProductId = 858421 }); //1500
+            //Type 32 can be insured <500 // 500-2000 -Smartphones
+            dto.Add(new HomeController.InsuranceDto { ProductId = 828519 }); //500
+            dto.Add(new HomeController.InsuranceDto { ProductId = 827074 }); //1500
+            //Type 33 can be insured <500 // 500-2000 -Digital Cameras
+            dto.Add(new HomeController.InsuranceDto { ProductId = 715990 }); //0 + 500
+            dto.Add(new HomeController.InsuranceDto { ProductId = 836194 }); //1000
+            //Type 35 cannot be insured <500 // >2000 -SLR Cameras
+            dto.Add(new HomeController.InsuranceDto { ProductId = 819148 }); //0
+            dto.Add(new HomeController.InsuranceDto { ProductId = 735296 }); //0
+            //Type 12 cannot be insured <500 -MP3 player
+            dto.Add(new HomeController.InsuranceDto { ProductId = 725435 }); //0
+            //Type 124 can be insured <500 // 500-2000 -Washing machines
+            dto.Add(new HomeController.InsuranceDto { ProductId = 572770 }); //0
+            dto.Add(new HomeController.InsuranceDto { ProductId = 735246 }); //1000
+            //Type 841 cannot be insured  500-2000 -Laptops
+            dto.Add(new HomeController.InsuranceDto { ProductId = 838978 }); //0
+
+            //Act
+            var sut = new HomeController();
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: expectedInsuranceValue,
+                actual: result
+                );
+        }
 
         //ToDo: add unit tests for task 4
+        [Fact]
+        public void CalculateInsurance_GivenAtLEastOneDigitalCameraInOrder_ShouldAdd1500Plus500ToInsurance()
+        {
+            //Arrange
+            const float expectedInsuranceValue = 1000;
 
+            var dto = new List<HomeController.InsuranceDto>();
+            dto.Add(new HomeController.InsuranceDto { ProductId = 837856 }); //500
+            dto.Add(new HomeController.InsuranceDto { ProductId = 715990 }); //0 + digital camera 500
+            dto.Add(new HomeController.InsuranceDto { ProductId = 725435 }); //0
+            dto.Add(new HomeController.InsuranceDto { ProductId = 572770 }); //0
+
+            //Act
+            var sut = new HomeController();
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: expectedInsuranceValue,
+                actual: result
+                );
+        }
     }
 
     /*public class ControllerTestFixture : IDisposable
