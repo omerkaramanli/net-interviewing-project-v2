@@ -17,7 +17,7 @@ namespace Insurance.Api.Controllers
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .WriteTo.File("../Logs/logs.txt", rollingInterval: RollingInterval.Day)
+                .WriteTo.File("/Logs/logs.txt", rollingInterval: RollingInterval.Day, shared: true)
                 .CreateLogger();
 
             //int productId = toInsure.ProductId;
@@ -60,7 +60,7 @@ namespace Insurance.Api.Controllers
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .WriteTo.File("../Logs/logs.txt", rollingInterval: RollingInterval.Day)
+                .WriteTo.File("/Logs/logs.txt", rollingInterval: RollingInterval.Day, shared: true)
                 .CreateLogger();
             float insurance = 0f;
             int countOfDigitalCameras = 0;
