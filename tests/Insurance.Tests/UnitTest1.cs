@@ -38,7 +38,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result.InsuranceValue
+                actual: result.Result
                 );
         }
 
@@ -60,7 +60,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result.InsuranceValue
+                actual: result.Result
                 );
         }
 
@@ -86,7 +86,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result.InsuranceValue
+                actual: result.Result
                 );
         }
 
@@ -108,7 +108,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result.InsuranceValue
+                actual: result.Result
                 );
         }
 
@@ -130,7 +130,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result.InsuranceValue
+                actual: result.Result
                 );
         }
 
@@ -156,7 +156,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result.InsuranceValue
+                actual: result.Result
                 );
         }
 
@@ -178,7 +178,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result.InsuranceValue
+                actual: result.Result
                 );
         }
 
@@ -200,7 +200,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result.InsuranceValue
+                actual: result.Result
                 );
         }
 
@@ -222,7 +222,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result.InsuranceValue
+                actual: result.Result
                 );
         }
 
@@ -245,7 +245,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result
+                actual: result.Result
                 );
         }
 
@@ -268,7 +268,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result
+                actual: result.Result
                 );
         }
 
@@ -291,7 +291,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result
+                actual: result.Result
                 );
         }
               
@@ -314,7 +314,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result
+                actual: result.Result
                 );
         }
 
@@ -337,7 +337,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result
+                actual: result.Result
                 );
         }
 
@@ -388,7 +388,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result
+                actual: result.Result
                 );
         }
 
@@ -411,7 +411,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result
+                actual: result.Result
                 );
         }
 
@@ -434,7 +434,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result
+                actual: result.Result
                 );
         }
 
@@ -485,7 +485,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result
+                actual: result.Result
                 );
         }
 
@@ -525,7 +525,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result
+                actual: result.Result
                 );
         }
 
@@ -548,7 +548,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result.InsuranceValue
+                actual: result.Result
                 );
         }
         [Fact]
@@ -569,7 +569,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result.InsuranceValue
+                actual: result.Result
                 );
         }
         [Fact]
@@ -591,7 +591,7 @@ namespace Insurance.Tests
             //Assert
             Assert.Equal(
                 expected: expectedInsuranceValue,
-                actual: result
+                actual: result.Result
                 );
         }
     }
