@@ -13,16 +13,9 @@ namespace Insurance.Api
 {
     public static class BusinessRules
     {
-        public static void GetProductType(string baseAddress, ref HomeController.InsuranceDto insurance) //productId
+        public static void GetProductType(string baseAddress, ref HomeController.InsuranceDto insurance) 
         {
-            /*Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()
-                .WriteTo.File("Logs/logs.txt", rollingInterval: RollingInterval.Day, shared: true)
-                .CreateLogger();*/
             HttpClient client = new HttpClient { BaseAddress = new Uri(baseAddress) };
-            //string json = client.GetAsync("/product_types").Result.Content.ReadAsStringAsync().Result;
-            //var collection = JsonConvert.DeserializeObject<dynamic>(json);
-            //instead of searching whole collection, we can just use product_types/{id}
             try
             {
                 Log.Information($"Getting product type {{ProductId = {insurance.ProductId}}} started.");
@@ -43,30 +36,10 @@ namespace Insurance.Api
             }
 
 
-            //int productTypeId = product.productTypeId;
-            //string productTypeName = null;
-            //bool hasInsurance = false;
-
-
-            //insurance = new HomeController.InsuranceDto();
-
-            /*for (int i = 0; i < collection.Count; i++)
-            {
-                if (collection[i].id == product.productTypeId && collection[i].canBeInsured == true)
-                {
-                    //insurance.ProductId = 
-                    insurance.ProductTypeName = collection[i].name;
-                    insurance.ProductTypeHasInsurance = true;
-                }
-            }*/
         }
 
-        public static void GetSalesPrice(string baseAddress, ref HomeController.InsuranceDto insurance) //productId
+        public static void GetSalesPrice(string baseAddress, ref HomeController.InsuranceDto insurance) 
         {
-            /*Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()
-                .WriteTo.File("Logs/logs.txt", rollingInterval: RollingInterval.Day, shared: true)
-                .CreateLogger();*/
             try
             {
                 Log.Information($"Getting product sales price {{ProductId = {insurance.ProductId}}} started.");

@@ -16,12 +16,6 @@ namespace Insurance.Api.Controllers
         [Route("api/insurance/product")]
         public ApiResponseModel CalculateInsurance([FromBody] InsuranceDto toInsure)
         {
-            /*Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.File("Logs/logs.txt", rollingInterval: RollingInterval.Day, shared: true)
-                .CreateLogger();*/
-
-            //int productId = toInsure.ProductId;
             try
             {
 
@@ -29,10 +23,6 @@ namespace Insurance.Api.Controllers
                 BusinessRules.GetProductType(ProductApi, ref toInsure);
                 BusinessRules.GetSalesPrice(ProductApi, ref toInsure);
 
-                //float insurance = 0f;
-
-                //simplified the if else block
-                //toInsure.InsuranceValue = 0;
                 if (toInsure.ProductTypeHasInsurance)
                 {
                     if (toInsure.SalesPrice >= 500 && toInsure.SalesPrice < 2000)
@@ -49,18 +39,15 @@ namespace Insurance.Api.Controllers
             catch (Exception ex)
             {
                 Log.Error($"Insurance value of {{ProductId = {toInsure.ProductId}}} could not be calculated\n{ex.Message}");
-                //throw new Exception($"Insurance value of {{ProductId = {toInsure.ProductId}}} could not be calculated");
                 return new ApiResponseModel(ApiResponseState.Error,ex.Message, ApiErrorCodeEnum.ProductNotFound);
 
             }
         }
 
+        [HttpPost]
+        [Route("api/insurance/productOrder")]
         public ApiResponseModel CalculateInsurance([FromBody] List<InsuranceDto> toInsure)
         {
-            /*Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.File("Logs/logs.txt", rollingInterval: RollingInterval.Day, shared: true)
-                .CreateLogger();*/
             float insurance = 0f;
             int countOfDigitalCameras = 0;
 
@@ -82,7 +69,6 @@ namespace Insurance.Api.Controllers
             catch (Exception ex)
             {
                 Log.Error($"Insurance of one or more items could not be calculated \n{ex.Message}");
-                //throw new Exception("Insurance of one or more items could not be calculated");
                 return new ApiResponseModel(ApiResponseState.Error, ex.Message, ApiErrorCodeEnum.ProductNotFound);
             }
 
