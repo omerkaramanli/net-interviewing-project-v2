@@ -48,12 +48,7 @@ namespace Insurance.Api.Controllers
                 Log.Error($"Insurance value of {{ProductId = {toInsure.ProductId}}} could not be calculated\n{ex.Message}");
                 //throw new Exception($"Insurance value of {{ProductId = {toInsure.ProductId}}} could not be calculated");
             }
-            if (toInsure != null)
-            {
-                return toInsure;
-            }
-            else //???
-                throw new Exception($"Insurance value of {{ProductId = {toInsure.ProductId}}} could not be calculated");
+            return toInsure;
         }
 
         public float CalculateInsurance([FromBody] List<InsuranceDto> toInsure)
