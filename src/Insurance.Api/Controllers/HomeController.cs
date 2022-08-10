@@ -29,7 +29,7 @@ namespace Insurance.Api.Controllers
             try
             {
                 //var ProductApi = _config.GetValue<string>("ProductApi");
-                float insurance = 0f;
+                //float insurance = 0f;
                 //Log.Information($"Calculation of insurance for {{ProductId = {toInsure.ProductId}}} started.");
                 BusinessRules.GetProductType(ProductApi, ref toInsure);
 
@@ -40,7 +40,7 @@ namespace Insurance.Api.Controllers
 
                 List<string> typeList = new List<string> { "Laptops", "Smartphones", "Digital cameras" };
                 BusinessRules.CalculateInsuranceValue(ref toInsure, typeList);
-                insurance = toInsure.InsuranceValue * (1 + toInsure.SurchargeRate / 100);
+                toInsure.InsuranceValue = toInsure.InsuranceValue * (1 + toInsure.SurchargeRate / 100);
                 //Log.Information($"Calculation of insurance for {{ProductId = {toInsure.ProductId}}} completed.");
                 return new ApiResponseModel(ApiResponseState.Success, toInsure.InsuranceValue);
 

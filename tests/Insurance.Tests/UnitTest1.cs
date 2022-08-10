@@ -580,6 +580,77 @@ namespace Insurance.Tests
                 actual: result.Result
                 );
         }
+
+
+        [Fact]
+        public void CalculateInsurance_GivenSurcharge10PercentForGivenSalesPriceBelow500Euros_ShouldRequireNoInsurance()
+        {
+            //Arrange
+            const float expectedInsuranceValue = 0;
+
+            var dto = new InsuranceDto
+            {
+                ProductId = 1,
+            };
+
+            //Act
+            var sut = new HomeController();
+            sut.AddSurcharge(dto, 10);
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: expectedInsuranceValue,
+                actual: result.Result
+                );
+        }
+
+        [Fact]
+        public void CalculateInsurance_GivenSurcharge10PercentForGivenSalesPriceBetween500And2000Euros_ShouldAdd1000EurosToInsuranceCost()
+        {
+            //Arrange
+            const float expectedInsuranceValue = 1100;
+
+            var dto = new InsuranceDto
+            {
+                ProductId = 12,
+            };
+
+            //Act
+            var sut = new HomeController();
+            sut.AddSurcharge(dto, 10);
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: expectedInsuranceValue,
+                actual: result.Result
+                );
+        }
+
+        [Fact]
+        public void CalculateInsurance_GivenSurcharge10PercentForGivenSalesPriceAbove2000Euros_ShouldAdd2000EurosToInsuranceCost()
+        {
+            //Arrange
+            const float expectedInsuranceValue = 2200;
+
+            var dto = new InsuranceDto
+            {
+                ProductId = 13,
+
+            };
+
+            //Act
+            var sut = new HomeController();
+            sut.AddSurcharge(dto, 10);
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: expectedInsuranceValue,
+                actual: result.Result
+                );
+        }
     }
 
     public class ControllerTestFixture : IDisposable
