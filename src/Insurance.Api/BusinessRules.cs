@@ -8,12 +8,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 //using Microsoft.Extensions.Logging;
 using Serilog;
+using Insurance.Api.Dtos;
 
 namespace Insurance.Api
 {
     public static class BusinessRules
     {
-        public static void GetProductType(string baseAddress, ref HomeController.InsuranceDto insurance) 
+        public static void GetProductType(string baseAddress, ref InsuranceDto insurance) 
         {
             HttpClient client = new HttpClient { BaseAddress = new Uri(baseAddress) };
             try
@@ -38,7 +39,7 @@ namespace Insurance.Api
 
         }
 
-        public static void GetSalesPrice(string baseAddress, ref HomeController.InsuranceDto insurance) 
+        public static void GetSalesPrice(string baseAddress, ref InsuranceDto insurance) 
         {
             try
             {
@@ -56,6 +57,37 @@ namespace Insurance.Api
                 throw new Exception($"Sales price for {{ProductId = {insurance.ProductId}}} could not be found.");
             }
 
+        }
+
+        public static void CalculateInsuranceValue(ref InsuranceDto insuranceDto, IList<string> typeList)
+        {
+            insuranceDto.InsuranceValue += CheckSalesPrice(insuranceDto.SalesPrice);
+            insuranceDto.InsuranceValue += CheckProductType(insuranceDto.ProductTypeName, typeList);
+        }
+
+        private static float CheckSalesPrice(float salesPrice)
+        {
+            if (salesPrice >= 500 &&
+                salesPrice < 2000)
+            {
+                return 1000;
+            }
+            else if (salesPrice >= 2000)
+            {
+                return 2000;
+            }
+
+            return 0;
+        }
+
+        private static float CheckProductType(string type, IList<string> typeList)
+        {
+            if (typeList.Any(x => x.Equals(type)))
+            {
+                return 500;
+            }
+
+            return 0;
         }
     }
 }

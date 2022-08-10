@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Insurance.Api.Controllers;
+using Insurance.Api.Dtos;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -26,7 +27,7 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 0;
 
-            var dto = new HomeController.InsuranceDto
+            var dto = new InsuranceDto
             {
                 ProductId = 725435,
             };
@@ -48,7 +49,7 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 1000;
 
-            var dto = new HomeController.InsuranceDto
+            var dto = new InsuranceDto
             {
                 ProductId = 735246,
             };
@@ -70,7 +71,7 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 2000;
 
-            var dto = new HomeController.InsuranceDto
+            var dto = new InsuranceDto
             {
                 ProductId = -1, //Dont have one yet
                 ProductTypeName = "Washing machines",
@@ -96,7 +97,7 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 500;
 
-            var dto = new HomeController.InsuranceDto
+            var dto = new InsuranceDto
             {
                 ProductId = 837856,
             };
@@ -118,7 +119,7 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 1500;
 
-            var dto = new HomeController.InsuranceDto
+            var dto = new InsuranceDto
             {
                 ProductId = 858421,
             };
@@ -140,7 +141,7 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 2500;
 
-            var dto = new HomeController.InsuranceDto
+            var dto = new InsuranceDto
             {
                 ProductId = -1, //Dont have one yet
                 ProductTypeName = "Smartphones",
@@ -166,7 +167,7 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 0;
 
-            var dto = new HomeController.InsuranceDto
+            var dto = new InsuranceDto
             {
                 ProductId = 819148, 
             };
@@ -188,7 +189,7 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 0;
 
-            var dto = new HomeController.InsuranceDto
+            var dto = new InsuranceDto
             {
                 ProductId = 767490,
             };
@@ -210,7 +211,7 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 0;
 
-            var dto = new HomeController.InsuranceDto
+            var dto = new InsuranceDto
             {
                 ProductId = 735296,
             };
@@ -232,11 +233,11 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 0;
 
-            var dto = new List<HomeController.InsuranceDto>();
-            dto.Add(new HomeController.InsuranceDto { ProductId = 819148 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 836676 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 832845 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 725435 });
+            var dto = new List<InsuranceDto>();
+            dto.Add(new InsuranceDto { ProductId = 819148 });
+            dto.Add(new InsuranceDto { ProductId = 836676 });
+            dto.Add(new InsuranceDto { ProductId = 832845 });
+            dto.Add(new InsuranceDto { ProductId = 725435 });
 
             //Act
             var sut = new HomeController();
@@ -255,11 +256,11 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 0;
 
-            var dto = new List<HomeController.InsuranceDto>();
-            dto.Add(new HomeController.InsuranceDto { ProductId = 838978 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 838978 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 838978 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 838978 });
+            var dto = new List<InsuranceDto>();
+            dto.Add(new InsuranceDto { ProductId = 838978 });
+            dto.Add(new InsuranceDto { ProductId = 838978 });
+            dto.Add(new InsuranceDto { ProductId = 838978 });
+            dto.Add(new InsuranceDto { ProductId = 838978 });
 
             //Act
             var sut = new HomeController();
@@ -278,11 +279,11 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 0;
 
-            var dto = new List<HomeController.InsuranceDto>();
-            dto.Add(new HomeController.InsuranceDto { ProductId = 735296 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 735296 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 735296 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 735296 });
+            var dto = new List<InsuranceDto>();
+            dto.Add(new InsuranceDto { ProductId = 735296 });
+            dto.Add(new InsuranceDto { ProductId = 735296 });
+            dto.Add(new InsuranceDto { ProductId = 735296 });
+            dto.Add(new InsuranceDto { ProductId = 735296 });
 
             //Act
             var sut = new HomeController();
@@ -301,11 +302,11 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 0;
 
-            var dto = new List<HomeController.InsuranceDto>();
-            dto.Add(new HomeController.InsuranceDto { ProductId = 572770 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 805073 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 572770 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 805073 });
+            var dto = new List<InsuranceDto>();
+            dto.Add(new InsuranceDto { ProductId = 572770 });
+            dto.Add(new InsuranceDto { ProductId = 805073 });
+            dto.Add(new InsuranceDto { ProductId = 572770 });
+            dto.Add(new InsuranceDto { ProductId = 805073 });
 
             //Act
             var sut = new HomeController();
@@ -324,11 +325,11 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 4000;
 
-            var dto = new List<HomeController.InsuranceDto>();
-            dto.Add(new HomeController.InsuranceDto { ProductId = 735246 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 735246 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 735246 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 735246 });
+            var dto = new List<InsuranceDto>();
+            dto.Add(new InsuranceDto { ProductId = 735246 });
+            dto.Add(new InsuranceDto { ProductId = 735246 });
+            dto.Add(new InsuranceDto { ProductId = 735246 });
+            dto.Add(new InsuranceDto { ProductId = 735246 });
 
             //Act
             var sut = new HomeController();
@@ -347,8 +348,8 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 8000;
 
-            var dto = new List<HomeController.InsuranceDto>();
-            dto.Add(new HomeController.InsuranceDto
+            var dto = new List<InsuranceDto>();
+            dto.Add(new InsuranceDto
             {
                 ProductId = -1, //Dont have one yet
                 ProductTypeName = "Washing machines",
@@ -356,7 +357,7 @@ namespace Insurance.Tests
                 ProductTypeHasInsurance = true,
                 InsuranceValue = 2000
             });
-            dto.Add(new HomeController.InsuranceDto
+            dto.Add(new InsuranceDto
             {
                 ProductId = -2, //Dont have one yet
                 ProductTypeName = "Washing machines",
@@ -364,7 +365,7 @@ namespace Insurance.Tests
                 ProductTypeHasInsurance = true,
                 InsuranceValue = 2000
             });
-            dto.Add(new HomeController.InsuranceDto
+            dto.Add(new InsuranceDto
             {
                 ProductId = -3, //Dont have one yet
                 ProductTypeName = "Washing machines",
@@ -372,7 +373,7 @@ namespace Insurance.Tests
                 ProductTypeHasInsurance = true,
                 InsuranceValue = 2000
             });
-            dto.Add(new HomeController.InsuranceDto
+            dto.Add(new InsuranceDto
             {
                 ProductId = -4, //Dont have one yet
                 ProductTypeName = "Washing machines",
@@ -398,11 +399,11 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 2000;
 
-            var dto = new List<HomeController.InsuranceDto>();
-            dto.Add(new HomeController.InsuranceDto { ProductId = 828519 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 837856 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 828519 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 837856 });
+            var dto = new List<InsuranceDto>();
+            dto.Add(new InsuranceDto { ProductId = 828519 });
+            dto.Add(new InsuranceDto { ProductId = 837856 });
+            dto.Add(new InsuranceDto { ProductId = 828519 });
+            dto.Add(new InsuranceDto { ProductId = 837856 });
 
             //Act
             var sut = new HomeController();
@@ -421,11 +422,11 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 6000;
 
-            var dto = new List<HomeController.InsuranceDto>();
-            dto.Add(new HomeController.InsuranceDto { ProductId = 827074 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 858421 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 859366 });
-            dto.Add(new HomeController.InsuranceDto { ProductId = 861866 });
+            var dto = new List<InsuranceDto>();
+            dto.Add(new InsuranceDto { ProductId = 827074 });
+            dto.Add(new InsuranceDto { ProductId = 858421 });
+            dto.Add(new InsuranceDto { ProductId = 859366 });
+            dto.Add(new InsuranceDto { ProductId = 861866 });
 
             //Act
             var sut = new HomeController();
@@ -444,8 +445,8 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 10000;
 
-            var dto = new List<HomeController.InsuranceDto>();
-            dto.Add(new HomeController.InsuranceDto
+            var dto = new List<InsuranceDto>();
+            dto.Add(new InsuranceDto
             {
                 ProductId = -1, //Dont have one yet
                 ProductTypeName = "Smartphones",
@@ -453,7 +454,7 @@ namespace Insurance.Tests
                 ProductTypeHasInsurance = true,
                 InsuranceValue = 2500
             });
-            dto.Add(new HomeController.InsuranceDto
+            dto.Add(new InsuranceDto
             {
                 ProductId = -2, //Dont have one yet
                 ProductTypeName = "Laptops",
@@ -461,7 +462,7 @@ namespace Insurance.Tests
                 ProductTypeHasInsurance = true,
                 InsuranceValue = 2500
             });
-            dto.Add(new HomeController.InsuranceDto
+            dto.Add(new InsuranceDto
             {
                 ProductId = -3, //Dont have one yet
                 ProductTypeName = "Smartphones",
@@ -469,7 +470,7 @@ namespace Insurance.Tests
                 ProductTypeHasInsurance = true,
                 InsuranceValue = 2500
             });
-            dto.Add(new HomeController.InsuranceDto
+            dto.Add(new InsuranceDto
             {
                 ProductId = -4, //Dont have one yet
                 ProductTypeName = "Laptops",
@@ -496,27 +497,27 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 6500;
 
-            var dto = new List<HomeController.InsuranceDto>();
+            var dto = new List<InsuranceDto>();
 
             //Type 21 can be insured <500 // 500-2000 -Laptops
-            dto.Add(new HomeController.InsuranceDto { ProductId = 837856 }); //500
-            dto.Add(new HomeController.InsuranceDto { ProductId = 858421 }); //1500
+            dto.Add(new InsuranceDto { ProductId = 837856 }); //500
+            dto.Add(new InsuranceDto { ProductId = 858421 }); //1500
             //Type 32 can be insured <500 // 500-2000 -Smartphones
-            dto.Add(new HomeController.InsuranceDto { ProductId = 828519 }); //500
-            dto.Add(new HomeController.InsuranceDto { ProductId = 827074 }); //1500
+            dto.Add(new InsuranceDto { ProductId = 828519 }); //500
+            dto.Add(new InsuranceDto { ProductId = 827074 }); //1500
             //Type 33 can be insured <500 // 500-2000 -Digital Cameras
-            dto.Add(new HomeController.InsuranceDto { ProductId = 715990 }); //0 + 500
-            dto.Add(new HomeController.InsuranceDto { ProductId = 836194 }); //1000
+            dto.Add(new InsuranceDto { ProductId = 715990 }); //0 + 500
+            dto.Add(new InsuranceDto { ProductId = 836194 }); //1000
             //Type 35 cannot be insured <500 // >2000 -SLR Cameras
-            dto.Add(new HomeController.InsuranceDto { ProductId = 819148 }); //0
-            dto.Add(new HomeController.InsuranceDto { ProductId = 735296 }); //0
+            dto.Add(new InsuranceDto { ProductId = 819148 }); //0
+            dto.Add(new InsuranceDto { ProductId = 735296 }); //0
             //Type 12 cannot be insured <500 -MP3 player
-            dto.Add(new HomeController.InsuranceDto { ProductId = 725435 }); //0
+            dto.Add(new InsuranceDto { ProductId = 725435 }); //0
             //Type 124 can be insured <500 // 500-2000 -Washing machines
-            dto.Add(new HomeController.InsuranceDto { ProductId = 572770 }); //0
-            dto.Add(new HomeController.InsuranceDto { ProductId = 735246 }); //1000
+            dto.Add(new InsuranceDto { ProductId = 572770 }); //0
+            dto.Add(new InsuranceDto { ProductId = 735246 }); //1000
             //Type 841 cannot be insured  500-2000 -Laptops
-            dto.Add(new HomeController.InsuranceDto { ProductId = 838978 }); //0
+            dto.Add(new InsuranceDto { ProductId = 838978 }); //0
 
             //Act
             var sut = new HomeController();
@@ -536,7 +537,7 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 500;
 
-            var dto = new HomeController.InsuranceDto
+            var dto = new InsuranceDto
             {
                 ProductId = 715990,
             };
@@ -557,7 +558,7 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 1500;
 
-            var dto = new HomeController.InsuranceDto
+            var dto = new InsuranceDto
             {
                 ProductId = 836194,
             };
@@ -578,11 +579,11 @@ namespace Insurance.Tests
             //Arrange
             const float expectedInsuranceValue = 2000;
 
-            var dto = new List<HomeController.InsuranceDto>();
-            dto.Add(new HomeController.InsuranceDto { ProductId = 837856 }); //500
-            dto.Add(new HomeController.InsuranceDto { ProductId = 715990 }); //0 + digital camera 500
-            dto.Add(new HomeController.InsuranceDto { ProductId = 836194 }); //1000 digital camera
-            dto.Add(new HomeController.InsuranceDto { ProductId = 572770 }); //0
+            var dto = new List<InsuranceDto>();
+            dto.Add(new InsuranceDto { ProductId = 837856 }); //500
+            dto.Add(new InsuranceDto { ProductId = 715990 }); //0 + digital camera 500
+            dto.Add(new InsuranceDto { ProductId = 836194 }); //1000 digital camera
+            dto.Add(new InsuranceDto { ProductId = 572770 }); //0
 
             //Act
             var sut = new HomeController();
