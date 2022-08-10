@@ -6,20 +6,21 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Xunit;
 
 namespace Insurance.Tests
 {
-    public class InsuranceTests //: IClassFixture<ControllerTestFixture>
+    public class InsuranceTests : IClassFixture<ControllerTestFixture>
     {
-       /* private readonly ControllerTestFixture _fixture;
+         private readonly ControllerTestFixture _fixture;
 
         public InsuranceTests(ControllerTestFixture fixture)
-        {
+         {
             _fixture = fixture;
-        }*/
+        }
 
         [Fact]
         public void CalculateInsurance_GivenSalesPriceBelow500Euros_ShouldRequireNoInsurance()
@@ -29,7 +30,7 @@ namespace Insurance.Tests
 
             var dto = new InsuranceDto
             {
-                ProductId = 725435,
+                ProductId = 1,
             };
 
             //Act
@@ -51,7 +52,7 @@ namespace Insurance.Tests
 
             var dto = new InsuranceDto
             {
-                ProductId = 735246,
+                ProductId = 12,
             };
 
             //Act
@@ -73,11 +74,8 @@ namespace Insurance.Tests
 
             var dto = new InsuranceDto
             {
-                ProductId = -1, //Dont have one yet
-                ProductTypeName = "Washing machines",
-                SalesPrice = 2500,
-                ProductTypeHasInsurance = true,
-                InsuranceValue = 2000
+                ProductId = 13, 
+                
             };
 
             //Act
@@ -99,7 +97,7 @@ namespace Insurance.Tests
 
             var dto = new InsuranceDto
             {
-                ProductId = 837856,
+                ProductId = 3,
             };
 
             //Act
@@ -121,7 +119,7 @@ namespace Insurance.Tests
 
             var dto = new InsuranceDto
             {
-                ProductId = 858421,
+                ProductId = 32,
             };
 
             //Act
@@ -143,11 +141,7 @@ namespace Insurance.Tests
 
             var dto = new InsuranceDto
             {
-                ProductId = -1, //Dont have one yet
-                ProductTypeName = "Smartphones",
-                SalesPrice = 2500,
-                ProductTypeHasInsurance = true,
-                InsuranceValue = 2500
+                ProductId = 33,
             };
 
             //Act
@@ -169,7 +163,7 @@ namespace Insurance.Tests
 
             var dto = new InsuranceDto
             {
-                ProductId = 819148, 
+                ProductId = 2, 
             };
 
             //Act
@@ -191,7 +185,7 @@ namespace Insurance.Tests
 
             var dto = new InsuranceDto
             {
-                ProductId = 767490,
+                ProductId = 22,
             };
 
             //Act
@@ -213,7 +207,7 @@ namespace Insurance.Tests
 
             var dto = new InsuranceDto
             {
-                ProductId = 735296,
+                ProductId = 23,
             };
 
             //Act
@@ -234,10 +228,9 @@ namespace Insurance.Tests
             const float expectedInsuranceValue = 0;
 
             var dto = new List<InsuranceDto>();
-            dto.Add(new InsuranceDto { ProductId = 819148 });
-            dto.Add(new InsuranceDto { ProductId = 836676 });
-            dto.Add(new InsuranceDto { ProductId = 832845 });
-            dto.Add(new InsuranceDto { ProductId = 725435 });
+            dto.Add(new InsuranceDto { ProductId = 2 });
+            dto.Add(new InsuranceDto { ProductId = 4 });
+            dto.Add(new InsuranceDto { ProductId = 6 });
 
             //Act
             var sut = new HomeController();
@@ -257,10 +250,9 @@ namespace Insurance.Tests
             const float expectedInsuranceValue = 0;
 
             var dto = new List<InsuranceDto>();
-            dto.Add(new InsuranceDto { ProductId = 838978 });
-            dto.Add(new InsuranceDto { ProductId = 838978 });
-            dto.Add(new InsuranceDto { ProductId = 838978 });
-            dto.Add(new InsuranceDto { ProductId = 838978 });
+            dto.Add(new InsuranceDto { ProductId = 22 });
+            dto.Add(new InsuranceDto { ProductId = 42 });
+            dto.Add(new InsuranceDto { ProductId = 62 });
 
             //Act
             var sut = new HomeController();
@@ -280,10 +272,9 @@ namespace Insurance.Tests
             const float expectedInsuranceValue = 0;
 
             var dto = new List<InsuranceDto>();
-            dto.Add(new InsuranceDto { ProductId = 735296 });
-            dto.Add(new InsuranceDto { ProductId = 735296 });
-            dto.Add(new InsuranceDto { ProductId = 735296 });
-            dto.Add(new InsuranceDto { ProductId = 735296 });
+            dto.Add(new InsuranceDto { ProductId = 23 });
+            dto.Add(new InsuranceDto { ProductId = 43 });
+            dto.Add(new InsuranceDto { ProductId = 63 });
 
             //Act
             var sut = new HomeController();
@@ -303,10 +294,10 @@ namespace Insurance.Tests
             const float expectedInsuranceValue = 0;
 
             var dto = new List<InsuranceDto>();
-            dto.Add(new InsuranceDto { ProductId = 572770 });
-            dto.Add(new InsuranceDto { ProductId = 805073 });
-            dto.Add(new InsuranceDto { ProductId = 572770 });
-            dto.Add(new InsuranceDto { ProductId = 805073 });
+            dto.Add(new InsuranceDto { ProductId = 1 });
+            dto.Add(new InsuranceDto { ProductId = 1 });
+            dto.Add(new InsuranceDto { ProductId = 1 });
+            dto.Add(new InsuranceDto { ProductId = 1 });
 
             //Act
             var sut = new HomeController();
@@ -326,10 +317,10 @@ namespace Insurance.Tests
             const float expectedInsuranceValue = 4000;
 
             var dto = new List<InsuranceDto>();
-            dto.Add(new InsuranceDto { ProductId = 735246 });
-            dto.Add(new InsuranceDto { ProductId = 735246 });
-            dto.Add(new InsuranceDto { ProductId = 735246 });
-            dto.Add(new InsuranceDto { ProductId = 735246 });
+            dto.Add(new InsuranceDto { ProductId = 12 });
+            dto.Add(new InsuranceDto { ProductId = 12 });
+            dto.Add(new InsuranceDto { ProductId = 12 });
+            dto.Add(new InsuranceDto { ProductId = 12 });
 
             //Act
             var sut = new HomeController();
@@ -351,35 +342,19 @@ namespace Insurance.Tests
             var dto = new List<InsuranceDto>();
             dto.Add(new InsuranceDto
             {
-                ProductId = -1, //Dont have one yet
-                ProductTypeName = "Washing machines",
-                SalesPrice = 2000,
-                ProductTypeHasInsurance = true,
-                InsuranceValue = 2000
+                ProductId = 13
             });
             dto.Add(new InsuranceDto
             {
-                ProductId = -2, //Dont have one yet
-                ProductTypeName = "Washing machines",
-                SalesPrice = 2100,
-                ProductTypeHasInsurance = true,
-                InsuranceValue = 2000
+                ProductId = 13
             });
             dto.Add(new InsuranceDto
             {
-                ProductId = -3, //Dont have one yet
-                ProductTypeName = "Washing machines",
-                SalesPrice = 2200,
-                ProductTypeHasInsurance = true,
-                InsuranceValue = 2000
+                ProductId = 13
             });
             dto.Add(new InsuranceDto
             {
-                ProductId = -4, //Dont have one yet
-                ProductTypeName = "Washing machines",
-                SalesPrice = 2300,
-                ProductTypeHasInsurance = true,
-                InsuranceValue = 2000
+                ProductId = 13
             });
 
             //Act
@@ -400,10 +375,10 @@ namespace Insurance.Tests
             const float expectedInsuranceValue = 2000;
 
             var dto = new List<InsuranceDto>();
-            dto.Add(new InsuranceDto { ProductId = 828519 });
-            dto.Add(new InsuranceDto { ProductId = 837856 });
-            dto.Add(new InsuranceDto { ProductId = 828519 });
-            dto.Add(new InsuranceDto { ProductId = 837856 });
+            dto.Add(new InsuranceDto { ProductId = 3 });
+            dto.Add(new InsuranceDto { ProductId = 5 });
+            dto.Add(new InsuranceDto { ProductId = 3 });
+            dto.Add(new InsuranceDto { ProductId = 5 });
 
             //Act
             var sut = new HomeController();
@@ -423,10 +398,10 @@ namespace Insurance.Tests
             const float expectedInsuranceValue = 6000;
 
             var dto = new List<InsuranceDto>();
-            dto.Add(new InsuranceDto { ProductId = 827074 });
-            dto.Add(new InsuranceDto { ProductId = 858421 });
-            dto.Add(new InsuranceDto { ProductId = 859366 });
-            dto.Add(new InsuranceDto { ProductId = 861866 });
+            dto.Add(new InsuranceDto { ProductId = 32 });
+            dto.Add(new InsuranceDto { ProductId = 52 });
+            dto.Add(new InsuranceDto { ProductId = 32 });
+            dto.Add(new InsuranceDto { ProductId = 52 });
 
             //Act
             var sut = new HomeController();
@@ -448,35 +423,19 @@ namespace Insurance.Tests
             var dto = new List<InsuranceDto>();
             dto.Add(new InsuranceDto
             {
-                ProductId = -1, //Dont have one yet
-                ProductTypeName = "Smartphones",
-                SalesPrice = 2000,
-                ProductTypeHasInsurance = true,
-                InsuranceValue = 2500
+                ProductId = 33
             });
             dto.Add(new InsuranceDto
             {
-                ProductId = -2, //Dont have one yet
-                ProductTypeName = "Laptops",
-                SalesPrice = 2100,
-                ProductTypeHasInsurance = true,
-                InsuranceValue = 2500
+                ProductId = 53
             });
             dto.Add(new InsuranceDto
             {
-                ProductId = -3, //Dont have one yet
-                ProductTypeName = "Smartphones",
-                SalesPrice = 2200,
-                ProductTypeHasInsurance = true,
-                InsuranceValue = 2500
+                ProductId = 33
             });
             dto.Add(new InsuranceDto
             {
-                ProductId = -4, //Dont have one yet
-                ProductTypeName = "Laptops",
-                SalesPrice = 2300,
-                ProductTypeHasInsurance = true,
-                InsuranceValue = 2500
+                ProductId = 53
             });
 
             //Act
@@ -495,29 +454,34 @@ namespace Insurance.Tests
         public void CalculateInsurance_GivenOneOfEachTypeOfItemInOrder_ShouldAdd6500ToInsurance()
         {
             //Arrange
-            const float expectedInsuranceValue = 6500;
+            const float expectedInsuranceValue = 15500;
 
             var dto = new List<InsuranceDto>();
 
-            //Type 21 can be insured <500 // 500-2000 -Laptops
-            dto.Add(new InsuranceDto { ProductId = 837856 }); //500
-            dto.Add(new InsuranceDto { ProductId = 858421 }); //1500
-            //Type 32 can be insured <500 // 500-2000 -Smartphones
-            dto.Add(new InsuranceDto { ProductId = 828519 }); //500
-            dto.Add(new InsuranceDto { ProductId = 827074 }); //1500
-            //Type 33 can be insured <500 // 500-2000 -Digital Cameras
-            dto.Add(new InsuranceDto { ProductId = 715990 }); //0 + 500
-            dto.Add(new InsuranceDto { ProductId = 836194 }); //1000
-            //Type 35 cannot be insured <500 // >2000 -SLR Cameras
-            dto.Add(new InsuranceDto { ProductId = 819148 }); //0
-            dto.Add(new InsuranceDto { ProductId = 735296 }); //0
-            //Type 12 cannot be insured <500 -MP3 player
-            dto.Add(new InsuranceDto { ProductId = 725435 }); //0
-            //Type 124 can be insured <500 // 500-2000 -Washing machines
-            dto.Add(new InsuranceDto { ProductId = 572770 }); //0
-            dto.Add(new InsuranceDto { ProductId = 735246 }); //1000
-            //Type 841 cannot be insured  500-2000 -Laptops
-            dto.Add(new InsuranceDto { ProductId = 838978 }); //0
+            dto.Add(new InsuranceDto { ProductId = 1  }); //0
+            dto.Add(new InsuranceDto { ProductId = 12 }); //1000
+            dto.Add(new InsuranceDto { ProductId = 13 }); //2000
+            dto.Add(new InsuranceDto { ProductId = 2  }); //0
+            dto.Add(new InsuranceDto { ProductId = 22 }); //0
+            dto.Add(new InsuranceDto { ProductId = 23 }); //0
+            dto.Add(new InsuranceDto { ProductId = 3  }); //500
+            dto.Add(new InsuranceDto { ProductId = 32 }); //1500
+            dto.Add(new InsuranceDto { ProductId = 33 }); //2500
+            dto.Add(new InsuranceDto { ProductId = 4  }); //0
+            dto.Add(new InsuranceDto { ProductId = 42 }); //0
+            dto.Add(new InsuranceDto { ProductId = 43 }); //0
+            dto.Add(new InsuranceDto { ProductId = 5  }); //500
+            dto.Add(new InsuranceDto { ProductId = 52 }); //1500
+            dto.Add(new InsuranceDto { ProductId = 53 }); //2500
+            dto.Add(new InsuranceDto { ProductId = 6  }); //0
+            dto.Add(new InsuranceDto { ProductId = 62 }); //0
+            dto.Add(new InsuranceDto { ProductId = 63 }); //0
+            dto.Add(new InsuranceDto { ProductId = 7  }); //0    + 500
+            dto.Add(new InsuranceDto { ProductId = 72 }); //1000 
+            dto.Add(new InsuranceDto { ProductId = 73 }); //2000 
+            dto.Add(new InsuranceDto { ProductId = 8  }); //0
+            dto.Add(new InsuranceDto { ProductId = 82 }); //0
+            dto.Add(new InsuranceDto { ProductId = 83 }); //0
 
             //Act
             var sut = new HomeController();
@@ -539,7 +503,7 @@ namespace Insurance.Tests
 
             var dto = new InsuranceDto
             {
-                ProductId = 715990,
+                ProductId = 7,
             };
 
             //Act
@@ -560,7 +524,28 @@ namespace Insurance.Tests
 
             var dto = new InsuranceDto
             {
-                ProductId = 836194,
+                ProductId = 72,
+            };
+
+            //Act
+            var sut = new HomeController();
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: expectedInsuranceValue,
+                actual: result.Result
+                );
+        }
+        [Fact]
+        public void CalculateInsurance_GivenOneDigitalCameraAbove2000Euros_ShouldAdd2500ToInsurance()
+        {
+            //Arrange
+            const float expectedInsuranceValue = 2500;
+
+            var dto = new InsuranceDto
+            {
+                ProductId = 73,
             };
 
             //Act
@@ -577,13 +562,13 @@ namespace Insurance.Tests
         public void CalculateInsurance_GivenAtLEastOneDigitalCameraInOrder_ShouldAdd1500Plus500ToInsurance()
         {
             //Arrange
-            const float expectedInsuranceValue = 2000;
+            const float expectedInsuranceValue = 2500;
 
             var dto = new List<InsuranceDto>();
-            dto.Add(new InsuranceDto { ProductId = 837856 }); //500
-            dto.Add(new InsuranceDto { ProductId = 715990 }); //0 + digital camera 500
-            dto.Add(new InsuranceDto { ProductId = 836194 }); //1000 digital camera
-            dto.Add(new InsuranceDto { ProductId = 572770 }); //0
+            dto.Add(new InsuranceDto { ProductId = 12 }); //500
+            dto.Add(new InsuranceDto { ProductId = 7 }); //0 + digital camera 500
+            dto.Add(new InsuranceDto { ProductId = 72 }); //1000 digital camera + 500
+            dto.Add(new InsuranceDto { ProductId = 1 }); //0
 
             //Act
             var sut = new HomeController();
@@ -597,7 +582,7 @@ namespace Insurance.Tests
         }
     }
 
-    /*public class ControllerTestFixture : IDisposable
+    public class ControllerTestFixture : IDisposable
     {
         private readonly IHost _host;
 
@@ -629,14 +614,434 @@ namespace Insurance.Tests
                         context =>
                         {
                             int productId = int.Parse((string)context.Request.RouteValues["id"]);
-                            var product = new
-                            {
-                                id = productId,
-                                name = "Test Product",
-                                productTypeId = 1,
-                                salesPrice = 750
+                            var products = new[]
+                                              {
+                                new
+                                {
+                                    id = 1,
+                                        name = "Test Product",
+                                        productTypeId = 1,
+                                        salesPrice = 250
+                                },
+                                new
+                                {
+                                   id = 12,
+                                        name = "Test Product",
+                                        productTypeId = 1,
+                                        salesPrice = 1250
+                                },
+                                new
+                                {
+                                    id = 13,
+                                        name = "Test Product",
+                                        productTypeId = 1,
+                                        salesPrice = 2250
+                                },
+                                new
+                                {
+                                    id = 2,
+                                        name = "Test Product",
+                                        productTypeId = 2,
+                                        salesPrice = 250
+                                },
+                                new
+                                {
+                                   id = 22,
+                                        name = "Test Product",
+                                        productTypeId = 2,
+                                        salesPrice = 1250
+                                },
+                                new
+                                {
+                                    id = 23,
+                                        name = "Test Product",
+                                        productTypeId = 2,
+                                        salesPrice = 2250
+                                },
+                                new
+                                {
+                                   id = 3,
+                                        name = "Laptops",
+                                        productTypeId = 3,
+                                        salesPrice = 250
+                                },
+                                new
+                                {
+                                   id = 32,
+                                        name = "Laptops",
+                                        productTypeId = 3,
+                                        salesPrice = 1250
+                                },
+                                new
+                                {
+                                   id = 33,
+                                        name = "Laptops",
+                                        productTypeId = 3,
+                                        salesPrice = 2250
+                                },
+                                new
+                                {
+                                   id = 4,
+                                        name = "Laptops",
+                                        productTypeId = 4,
+                                        salesPrice = 250
+                                },
+                                new
+                                {
+                                   id = 42,
+                                        name = "Laptops",
+                                        productTypeId = 4,
+                                        salesPrice = 1250
+                                },
+                                new
+                                {
+                                   id = 43,
+                                        name = "Laptops",
+                                        productTypeId = 4,
+                                        salesPrice = 2250
+                                },
+                                new
+                                {
+                                   id = 5,
+                                        name = "Smartphones",
+                                        productTypeId = 5,
+                                        salesPrice = 250
+                                },
+                                new
+                                {
+                                   id = 52,
+                                        name = "Smartphones",
+                                        productTypeId = 5,
+                                        salesPrice = 1250
+                                },
+                                new
+                                {
+                                   id = 53,
+                                        name = "Smartphones",
+                                        productTypeId = 5,
+                                        salesPrice = 2250
+                                },
+                                new
+                                {
+                                   id = 6,
+                                        name = "Smartphones",
+                                        productTypeId = 6,
+                                        salesPrice = 250
+                                },
+                                new
+                                {
+                                   id = 62,
+                                        name = "Smartphones",
+                                        productTypeId = 6,
+                                        salesPrice = 1250
+                                },
+                                new
+                                {
+                                   id = 63,
+                                        name = "Smartphones",
+                                        productTypeId = 6,
+                                        salesPrice = 2250
+                                },
+                                new
+                                {
+                                   id = 7,
+                                        name = "Digital cameras",
+                                        productTypeId = 7,
+                                        salesPrice = 250
+                                },
+                                new
+                                {
+                                   id = 72,
+                                        name = "Digital cameras",
+                                        productTypeId = 7,
+                                        salesPrice = 1250
+                                },
+                                new
+                                {
+                                   id = 73,
+                                        name = "Digital cameras",
+                                        productTypeId = 7,
+                                        salesPrice = 2250
+                                },
+                                new
+                                {
+                                   id = 8,
+                                        name = "Digital cameras",
+                                        productTypeId = 8,
+                                        salesPrice = 250
+                                },
+                                new
+                                {
+                                   id = 82,
+                                        name = "Digital cameras",
+                                        productTypeId = 8,
+                                        salesPrice = 1250
+                                },
+                                new
+                                {
+                                   id = 83,
+                                        name = "Digital cameras",
+                                        productTypeId = 8,
+                                        salesPrice = 2250
+                                },
                             };
-                            return context.Response.WriteAsync(JsonConvert.SerializeObject(product));
+
+                            for (int i = 0; i < products.Length; i++)
+                            {
+                                if (products[i].id == productId)
+                                {
+                                    return context.Response.WriteAsync(JsonConvert.SerializeObject(products[i]));
+
+                                }
+                            }
+
+                            return context.Response.WriteAsync(JsonConvert.SerializeObject("Not found"));
+                        }
+                    );
+                    ep.MapGet(
+                        "products",
+                        context =>
+                        {
+                            var products = new[]
+                                               {
+                                new
+                                {
+                                    id = 1,
+                                        name = "Test Product",
+                                        productTypeId = 1,
+                                        salesPrice = 250
+                                },
+                                new
+                                {
+                                   id = 12,
+                                        name = "Test Product",
+                                        productTypeId = 1,
+                                        salesPrice = 1250
+                                },
+                                new
+                                {
+                                    id = 13,
+                                        name = "Test Product",
+                                        productTypeId = 1,
+                                        salesPrice = 2250
+                                },
+                                new
+                                {
+                                    id = 2,
+                                        name = "Test Product",
+                                        productTypeId = 2,
+                                        salesPrice = 250
+                                },
+                                new
+                                {
+                                   id = 22,
+                                        name = "Test Product",
+                                        productTypeId = 2,
+                                        salesPrice = 1250
+                                },
+                                new
+                                {
+                                    id = 23,
+                                        name = "Test Product",
+                                        productTypeId = 2,
+                                        salesPrice = 2250
+                                },
+                                new
+                                {
+                                   id = 3,
+                                        name = "Laptops",
+                                        productTypeId = 3,
+                                        salesPrice = 250
+                                },
+                                new
+                                {
+                                   id = 32,
+                                        name = "Laptops",
+                                        productTypeId = 3,
+                                        salesPrice = 1250
+                                },
+                                new
+                                {
+                                   id = 33,
+                                        name = "Laptops",
+                                        productTypeId = 3,
+                                        salesPrice = 2250
+                                },
+                                new
+                                {
+                                   id = 4,
+                                        name = "Laptops",
+                                        productTypeId = 4,
+                                        salesPrice = 250
+                                },
+                                new
+                                {
+                                   id = 42,
+                                        name = "Laptops",
+                                        productTypeId = 4,
+                                        salesPrice = 1250
+                                },
+                                new
+                                {
+                                   id = 43,
+                                        name = "Laptops",
+                                        productTypeId = 4,
+                                        salesPrice = 2250
+                                },
+                                new
+                                {
+                                   id = 5,
+                                        name = "Smartphones",
+                                        productTypeId = 5,
+                                        salesPrice = 250
+                                },
+                                new
+                                {
+                                   id = 52,
+                                        name = "Smartphones",
+                                        productTypeId = 5,
+                                        salesPrice = 1250
+                                },
+                                new
+                                {
+                                   id = 53,
+                                        name = "Smartphones",
+                                        productTypeId = 5,
+                                        salesPrice = 2250
+                                },
+                                new
+                                {
+                                   id = 6,
+                                        name = "Smartphones",
+                                        productTypeId = 6,
+                                        salesPrice = 250
+                                },
+                                new
+                                {
+                                   id = 62,
+                                        name = "Smartphones",
+                                        productTypeId = 6,
+                                        salesPrice = 1250
+                                },
+                                new
+                                {
+                                   id = 63,
+                                        name = "Smartphones",
+                                        productTypeId = 6,
+                                        salesPrice = 2250
+                                },
+                                new
+                                {
+                                   id = 7,
+                                        name = "Digital cameras",
+                                        productTypeId = 7,
+                                        salesPrice = 250
+                                },
+                                new
+                                {
+                                   id = 72,
+                                        name = "Digital cameras",
+                                        productTypeId = 7,
+                                        salesPrice = 1250
+                                },
+                                new
+                                {
+                                   id = 73,
+                                        name = "Digital cameras",
+                                        productTypeId = 7,
+                                        salesPrice = 2250
+                                },
+                                new
+                                {
+                                   id = 8,
+                                        name = "Digital cameras",
+                                        productTypeId = 8,
+                                        salesPrice = 250
+                                },
+                                new
+                                {
+                                   id = 82,
+                                        name = "Digital cameras",
+                                        productTypeId = 8,
+                                        salesPrice = 1250
+                                },
+                                new
+                                {
+                                   id = 83,
+                                        name = "Digital cameras",
+                                        productTypeId = 8,
+                                        salesPrice = 2250
+                                },
+                            };
+                            return context.Response.WriteAsync(JsonConvert.SerializeObject(products));
+                        }
+                    );
+                    ep.MapGet(
+                        "product_types/{id:int}",
+                        context =>
+                        {
+                            int productId = int.Parse((string)context.Request.RouteValues["id"]);
+                            var productTypes = new[]
+                                               {
+                            new
+                            {
+                                id = 1,
+                                name = "Test type",
+                                canBeInsured = true
+                            },
+                            new
+                            {
+                                id = 2,
+                                name = "Test type",
+                                canBeInsured = false
+                            },
+                            new
+                            {
+                                id = 3,
+                                name = "Laptops",
+                                canBeInsured = true
+                            },
+                            new
+                            {
+                                id = 4,
+                                name = "Laptops",
+                                canBeInsured = false
+                            },
+                            new
+                            {
+                                id = 5,
+                                name = "Smartphones",
+                                canBeInsured = true
+                            },
+                            new
+                            {
+                                id = 6,
+                                name = "Smarthphones",
+                                canBeInsured = false
+                            },
+                            new
+                            {
+                                id = 7,
+                                name = "Digital cameras",
+                                canBeInsured = true
+                            },
+                            new
+                            {
+                                id = 8,
+                                name = "Digital cameras",
+                                canBeInsured = false
+                            },
+                        };
+                            for (int i = 0; i < productTypes.Length; i++)
+                            {
+                                if (productTypes[i].id == productId)
+                                {
+                                    return context.Response.WriteAsync(JsonConvert.SerializeObject(productTypes[i]));
+
+                                }
+                            }
+
+                            return context.Response.WriteAsync(JsonConvert.SerializeObject("Not found"));
                         }
                     );
                     ep.MapGet(
@@ -645,18 +1050,61 @@ namespace Insurance.Tests
                         {
                             var productTypes = new[]
                                                {
-                                                   new
-                                                   {
-                                                       id = 1,
-                                                       name = "Test type",
-                                                       canBeInsured = true
-                                                   }
-                                               };
+                            new
+                            {
+                                id = 1,
+                                name = "Test type",
+                                canBeInsured = true
+                            },
+                            new
+                            {
+                                id = 2,
+                                name = "Test type",
+                                canBeInsured = false
+                            },
+                            new
+                            {
+                                id = 3,
+                                name = "Laptops",
+                                canBeInsured = true
+                            },
+                            new
+                            {
+                                id = 4,
+                                name = "Laptops",
+                                canBeInsured = false
+                            },
+                            new
+                            {
+                                id = 5,
+                                name = "Smartphones",
+                                canBeInsured = true
+                            },
+                            new
+                            {
+                                id = 6,
+                                name = "Smarthphones",
+                                canBeInsured = false
+                            },
+                            new
+                            {
+                                id = 7,
+                                name = "Digital cameras",
+                                canBeInsured = true
+                            },
+                            new
+                            {
+                                id = 8,
+                                name = "Digital cameras",
+                                canBeInsured = false
+                            },
+                        };
                             return context.Response.WriteAsync(JsonConvert.SerializeObject(productTypes));
                         }
                     );
+
                 }
             );
         }
-    }*/
+    }
 }

@@ -15,11 +15,11 @@ namespace Insurance.Api.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IConfiguration _config;
+        /*private readonly IConfiguration _config;
         public HomeController(IConfiguration config)
         {
             _config = config;
-        }
+        }*/
 
 
         [HttpPost]
@@ -28,7 +28,7 @@ namespace Insurance.Api.Controllers
         {
             try
             {
-                var ProductApi = _config.GetValue<string>("ProductApi");
+                //var ProductApi = _config.GetValue<string>("ProductApi");
                 float insurance = 0f;
                 //Log.Information($"Calculation of insurance for {{ProductId = {toInsure.ProductId}}} started.");
                 BusinessRules.GetProductType(ProductApi, ref toInsure);
@@ -47,7 +47,7 @@ namespace Insurance.Api.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error($"Insurance value of {{ProductId = {toInsure.ProductId}}} could not be calculated\n{ex.Message}");
+             //   Log.Error($"Insurance value of {{ProductId = {toInsure.ProductId}}} could not be calculated\n{ex.Message}");
                 return new ApiResponseModel(ApiResponseState.Error, ex.Message, ApiErrorCodeEnum.ProductNotFound);
 
             }
@@ -64,7 +64,7 @@ namespace Insurance.Api.Controllers
                 //               Log.Information($"Calculation of insurance for an order started. Count of products in the order: {toInsure.Count}");
 
                 List<string> typeList = new List<string> { "Laptops", "Smartphones" };
-                var ProductApi = _config.GetValue<string>("ProductApi");
+                //var ProductApi = _config.GetValue<string>("ProductApi");
 
 
                 toInsure.ForEach(x =>
@@ -88,7 +88,7 @@ namespace Insurance.Api.Controllers
             }
             catch (Exception ex)
             {
-                Log.Error($"Insurance of one or more items could not be calculated \n{ex.Message}");
+                //Log.Error($"Insurance of one or more items could not be calculated \n{ex.Message}");
                 return new ApiResponseModel(ApiResponseState.Error, ex.Message, ApiErrorCodeEnum.ProductNotFound);
             }
         }
@@ -100,6 +100,6 @@ namespace Insurance.Api.Controllers
             toInsure.SurchargeRate = surchargeRate;
         }
 
-        //private const string ProductApi = "http://localhost:5002";
+        private const string ProductApi = "http://localhost:5002";
     }
 }
