@@ -4,23 +4,26 @@ using System.Net;
 using System.Net.Http;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
-//using Microsoft.Extensions.Logging;
 using Serilog;
 using Insurance.Api.Models;
 using Insurance.Api.Dtos;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
+
 
 namespace Insurance.Api.Controllers
 {
     public class HomeController : Controller
     {
-        /*private readonly IConfiguration _config;
+        //private const string ProductApi = "http://localhost:5002";
+        private readonly IConfiguration _config;
         public HomeController(IConfiguration config)
         {
             _config = config;
-        }*/
+        }
 
+        //public HomeController(){}
 
         [HttpPost]
         [Route("api/insurance/product")]
@@ -28,9 +31,8 @@ namespace Insurance.Api.Controllers
         {
             try
             {
-                //var ProductApi = _config.GetValue<string>("ProductApi");
-                //float insurance = 0f;
-                //Log.Information($"Calculation of insurance for {{ProductId = {toInsure.ProductId}}} started.");
+                var ProductApi = _config.GetValue<string>("ProductApi");
+                Log.Information($"Calculation of insurance for {{ProductId = {toInsure.ProductId}}} started.");
                 BusinessRules.GetProductType(ProductApi, ref toInsure);
 
                 if (!toInsure.ProductTypeHasInsurance)
@@ -38,16 +40,19 @@ namespace Insurance.Api.Controllers
 
                 BusinessRules.GetSalesPrice(ProductApi, ref toInsure);
 
-                List<string> typeList = new List<string> { "Laptops", "Smartphones", "Digital cameras" };
+                List<string> typeList = new List<string> {
+                    StaticDataProvider.Laptops,
+                    StaticDataProvider.DigitalCameras,
+                    StaticDataProvider.SmartPhones};
+
                 BusinessRules.CalculateInsuranceValue(ref toInsure, typeList);
-                toInsure.InsuranceValue = toInsure.InsuranceValue * (1 + toInsure.SurchargeRate / 100);
-                //Log.Information($"Calculation of insurance for {{ProductId = {toInsure.ProductId}}} completed.");
+                Log.Information($"Calculation of insurance for {{ProductId = {toInsure.ProductId}}} completed.");
                 return new ApiResponseModel(ApiResponseState.Success, toInsure.InsuranceValue);
 
             }
             catch (Exception ex)
             {
-             //   Log.Error($"Insurance value of {{ProductId = {toInsure.ProductId}}} could not be calculated\n{ex.Message}");
+                Log.Error($"Insurance value of {{ProductId = {toInsure.ProductId}}} could not be calculated\n{ex.Message}");
                 return new ApiResponseModel(ApiResponseState.Error, ex.Message, ApiErrorCodeEnum.ProductNotFound);
 
             }
@@ -61,10 +66,12 @@ namespace Insurance.Api.Controllers
 
             try
             {
-                //               Log.Information($"Calculation of insurance for an order started. Count of products in the order: {toInsure.Count}");
+                var ProductApi = _config.GetValue<string>("ProductApi");
+                Log.Information($"Calculation of insurance for an order started. Id of products in the order: {string.Join("\n", toInsure.Select(x => x.ProductId))}");
 
-                List<string> typeList = new List<string> { "Laptops", "Smartphones" };
-                //var ProductApi = _config.GetValue<string>("ProductApi");
+                List<string> typeList = new List<string> {
+                    StaticDataProvider.Laptops,
+                    StaticDataProvider.SmartPhones};
 
 
                 toInsure.ForEach(x =>
@@ -77,29 +84,43 @@ namespace Insurance.Api.Controllers
                         BusinessRules.CalculateInsuranceValue(ref x, typeList);
                     }
 
-                    insurance += x.InsuranceValue * (1 + x.SurchargeRate / 100);
+                    insurance += x.InsuranceValue; 
                 });
 
-                if (toInsure.Any(x => x.ProductTypeName == "Digital cameras")) insurance += 500;
+                if (toInsure.Any(x => x.ProductTypeName.Equals(StaticDataProvider.DigitalCameras))) 
+                    insurance += StaticDataProvider.DigitalCamerasAdditionalInsuranceValue;
 
-                //                Log.Information($"Calculation of insurance for an order completed.");
+                Log.Information($"Calculation of insurance for an order completed.");
                 return new ApiResponseModel(ApiResponseState.Success, insurance);
 
             }
             catch (Exception ex)
             {
-                //Log.Error($"Insurance of one or more items could not be calculated \n{ex.Message}");
+                Log.Error($"Insurance of one or more items could not be calculated \n{ex.Message}");
                 return new ApiResponseModel(ApiResponseState.Error, ex.Message, ApiErrorCodeEnum.ProductNotFound);
             }
         }
 
         [HttpPost]
         [Route("api/insurance/surcharge")]
-        public void AddSurcharge([FromBody] InsuranceDto toInsure, float surchargeRate)
+        public async Task<ApiResponseModel> AddSurcharge([FromBody] InsuranceDto toInsure)
         {
-            toInsure.SurchargeRate = surchargeRate;
+            try
+            {
+                var ProductApi = _config.GetValue<string>("ProductApi"); 
+                BusinessRules.GetProductType(ProductApi, ref toInsure);
+                var surchargeRates = BusinessRules.ReadSurchargeFile();
+                if (surchargeRates.Any(x => x.ProductId == toInsure.ProductId))
+                    surchargeRates.Remove(surchargeRates.Find(x => x.ProductId == toInsure.ProductId));
+                surchargeRates.Add(toInsure);
+                BusinessRules.WriteSurchargeFile(surchargeRates);
+                return new ApiResponseModel(ApiResponseState.Success, 0);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"There was an error while adding the Surcharge rate\n{ex.Message}");
+                return new ApiResponseModel(ApiResponseState.Error, "There was an error while adding the Surcharge rate", ApiErrorCodeEnum.ProductNotFound);
+            }
         }
-
-        private const string ProductApi = "http://localhost:5002";
     }
 }

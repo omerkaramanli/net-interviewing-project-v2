@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Insurance.Api.Controllers;
 using Insurance.Api.Dtos;
 using Microsoft.AspNetCore.Builder;
@@ -15,10 +16,9 @@ namespace Insurance.Tests
 {
     public class InsuranceTests : IClassFixture<ControllerTestFixture>
     {
-         private readonly ControllerTestFixture _fixture;
-
+        private readonly ControllerTestFixture _fixture;
         public InsuranceTests(ControllerTestFixture fixture)
-         {
+        {
             _fixture = fixture;
         }
 
@@ -583,19 +583,20 @@ namespace Insurance.Tests
 
 
         [Fact]
-        public void CalculateInsurance_GivenSurcharge10PercentForGivenSalesPriceBelow500Euros_ShouldRequireNoInsurance()
+        public async void CalculateInsurance_GivenSurcharge10PercentForGivenSalesPriceBelow500Euros_ShouldRequireNoInsuranceAsync()
         {
             //Arrange
             const float expectedInsuranceValue = 0;
 
             var dto = new InsuranceDto
             {
-                ProductId = 1,
+                ProductId = 9,
+                SurchargeRate = 10
             };
 
             //Act
             var sut = new HomeController();
-            sut.AddSurcharge(dto, 10);
+            await sut.AddSurcharge(dto);
             var result = sut.CalculateInsurance(dto);
 
             //Assert
@@ -606,19 +607,20 @@ namespace Insurance.Tests
         }
 
         [Fact]
-        public void CalculateInsurance_GivenSurcharge10PercentForGivenSalesPriceBetween500And2000Euros_ShouldAdd1000EurosToInsuranceCost()
+        public async void CalculateInsurance_GivenSurcharge10PercentForGivenSalesPriceBetween500And2000Euros_ShouldAdd1000EurosToInsuranceCostAsync()
         {
             //Arrange
             const float expectedInsuranceValue = 1100;
 
             var dto = new InsuranceDto
             {
-                ProductId = 12,
+                ProductId = 92,
+                SurchargeRate = 10
             };
 
             //Act
             var sut = new HomeController();
-            sut.AddSurcharge(dto, 10);
+            await sut.AddSurcharge(dto);
             var result = sut.CalculateInsurance(dto);
 
             //Assert
@@ -629,20 +631,20 @@ namespace Insurance.Tests
         }
 
         [Fact]
-        public void CalculateInsurance_GivenSurcharge10PercentForGivenSalesPriceAbove2000Euros_ShouldAdd2000EurosToInsuranceCost()
+        public async void CalculateInsurance_GivenSurcharge10PercentForGivenSalesPriceAbove2000Euros_ShouldAdd2000EurosToInsuranceCost()
         {
             //Arrange
             const float expectedInsuranceValue = 2200;
 
             var dto = new InsuranceDto
             {
-                ProductId = 13,
-
+                ProductId = 93,
+                SurchargeRate = 10
             };
 
             //Act
             var sut = new HomeController();
-            sut.AddSurcharge(dto, 10);
+            await sut.AddSurcharge(dto);
             var result = sut.CalculateInsurance(dto);
 
             //Assert
@@ -687,6 +689,27 @@ namespace Insurance.Tests
                             int productId = int.Parse((string)context.Request.RouteValues["id"]);
                             var products = new[]
                                               {
+                                new
+                                {
+                                    id = 9,
+                                        name = "Test Product",
+                                        productTypeId = 1,
+                                        salesPrice = 250
+                                },
+                                new
+                                {
+                                   id = 92,
+                                        name = "Test Product",
+                                        productTypeId = 1,
+                                        salesPrice = 1250
+                                },
+                                new
+                                {
+                                    id = 93,
+                                        name = "Test Product",
+                                        productTypeId = 1,
+                                        salesPrice = 2250
+                                },
                                 new
                                 {
                                     id = 1,

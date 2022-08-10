@@ -5,8 +5,6 @@ namespace Insurance.Api.Dtos
 {
     public class InsuranceDto
     {
-        [Required]
-        [MinLength(1)]
         public int ProductId { get; set; }
         public float InsuranceValue { get; set; }
         [JsonIgnore]
@@ -15,7 +13,6 @@ namespace Insurance.Api.Dtos
         public bool ProductTypeHasInsurance { get; set; }
         [JsonIgnore]
         public float SalesPrice { get; set; }
-        [JsonIgnore]
         public float SurchargeRate { get; set; }
     }
 }
