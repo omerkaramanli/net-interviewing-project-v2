@@ -113,8 +113,8 @@ namespace Insurance.Api.Controllers
 
                 BusinessRules.GetProductType(ProductApi, ref toInsure);
                 var surchargeRates = BusinessRules.ReadSurchargeFile();
-                if (surchargeRates.Any(x => x.ProductId == toInsure.ProductId))
-                    surchargeRates.Remove(surchargeRates.Find(x => x.ProductId == toInsure.ProductId));
+                if (surchargeRates.Any(x => x.ProductTypeName.Equals(toInsure.ProductTypeName)))
+                    surchargeRates.Remove(surchargeRates.Find(x => x.ProductTypeName.Equals(toInsure.ProductTypeName)));
                 surchargeRates.Add(toInsure);
                 BusinessRules.WriteSurchargeFile(surchargeRates);
                 return new ApiResponseModel(ApiResponseState.Success, 0);

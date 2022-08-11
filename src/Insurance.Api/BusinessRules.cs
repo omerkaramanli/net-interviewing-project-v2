@@ -77,23 +77,23 @@ namespace Insurance.Api
         {
             insuranceDto.InsuranceValue += CheckSalesPrice(insuranceDto.SalesPrice);
             insuranceDto.InsuranceValue += CheckProductType(insuranceDto.ProductTypeName, typeList);
-            insuranceDto.InsuranceValue *= CheckSurchargeRate(insuranceDto.ProductId);
+            insuranceDto.InsuranceValue *= CheckSurchargeRate(insuranceDto.ProductTypeName);
         }
 
-        private static float CheckSurchargeRate(int productId)
+        private static float CheckSurchargeRate(string ProductTypeName)
         {
             try
             {
                 var surchargeRates = ReadSurchargeFile();
                 float surchargeRate = 0f;
-                if(surchargeRates.Any(x=>x.ProductId == productId))
-                    surchargeRate = surchargeRates.Find(x => x.ProductId == productId).SurchargeRate;
+                if(surchargeRates.Any(x=>x.ProductTypeName.Equals(ProductTypeName)))
+                    surchargeRate = surchargeRates.Find(x => x.ProductTypeName.Equals(ProductTypeName)).SurchargeRate;
                 return 1 + (surchargeRate / 100);
             }
             catch (Exception ex)
             {
                 Log.Error(ex.Message);
-                throw new Exception($"Surcharge rate for {{ProductId = {productId}}} could not be calculated.");
+                throw new Exception($"Surcharge rate for {{ProductTypeName = {ProductTypeName}}} could not be calculated.");
             }
         }
 
@@ -116,7 +116,8 @@ namespace Insurance.Api
                         var surchargeRate = new InsuranceDto
                         {
                             ProductId = Int32.Parse(csv.GetField("ProductId")),
-                            SurchargeRate = float.Parse(csv.GetField("SurchargeRate"))
+                            SurchargeRate = float.Parse(csv.GetField("SurchargeRate")),
+                            ProductTypeName = csv.GetField("ProductTypeName")
                         };
                         surchargeRates.Add(surchargeRate);
                     }
