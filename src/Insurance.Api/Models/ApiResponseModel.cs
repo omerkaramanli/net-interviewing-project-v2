@@ -1,24 +1,22 @@
 ﻿namespace Insurance.Api.Models
 {
-    public class ApiResponseModel
+    public class ApiResponseModel<T>
     {
+        public T Result { get; set; }
+        public string ErrorMessage { get; set; }
+        public ApiState Status { get; set; }
 
-        public ApiResponseModel(ApiResponseState stateCode, string errorMessage, ApiErrorCodeEnum errorCode)
+        public ApiResponseModel(ApiState apiState, string errorMessage)
         {
-            StateCode = stateCode; 
-            ErrorMessage = errorMessage; 
-            ErrorCode = errorCode;
+            Status = apiState;
+            ErrorMessage = errorMessage;
         }
 
-        public ApiResponseModel(ApiResponseState stateCode, float result)
+        public ApiResponseModel(ApiState apiState, T result)
         {
-            StateCode = stateCode;
+            Status = apiState;
             Result = result;
         }
-        public ApiResponseState StateCode { get; set; }  
-        public string ErrorMessage { get; set; }    
-        public ApiErrorCodeEnum ErrorCode { get; set; }
-        public float Result { get; set; }   
 
     }
 }

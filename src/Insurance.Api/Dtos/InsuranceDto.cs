@@ -14,5 +14,6 @@ namespace Insurance.Api.Dtos
         [JsonIgnore]
         public float SalesPrice { get; set; }
         public float SurchargeRate { get; set; }
+        public int Status { get; set; } 
     }
 }

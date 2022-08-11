@@ -11,12 +11,14 @@ using Insurance.Api.Dtos;
 using System.IO;
 using CsvHelper;
 using System.Globalization;
+using Insurance.Api.Interfaces;
+using Insurance.Api.Models;
 
 namespace Insurance.Api
 {
-    public static class BusinessRules
+    public class BusinessRules : IInsuranceService
     {
-        public static void GetProductType(string baseAddress, ref InsuranceDto insurance)
+        public async Task<ApiResponseModel<InsuranceDto>> GetProductType(string baseAddress, InsuranceDto insurance)
         {
             HttpClient client = new HttpClient { BaseAddress = new Uri(baseAddress) };
             try
@@ -39,17 +41,18 @@ namespace Insurance.Api
                 insurance.ProductTypeName = productType.name;
                 insurance.ProductTypeHasInsurance = productType.canBeInsured;
                 Log.Information($"Getting product type {{ProductId = {insurance.ProductId}}} completed.");
+                return new ApiResponseModel<InsuranceDto>(ApiState.Success, insurance);
             }
             catch (Exception ex)
             {
                 Log.Error(ex.Message);
-                throw new Exception($"Product type for {{ProductId = {insurance.ProductId}}} could not be found or product does not exist.");
+                return new ApiResponseModel<InsuranceDto>(ApiState.NotFound,$"Product type for {{ProductId = {insurance.ProductId}}} could not be found or product does not exist.");
             }
 
 
         }
 
-        public static void GetSalesPrice(string baseAddress, ref InsuranceDto insurance)
+        public async Task<ApiResponseModel<InsuranceDto>> GetSalesPrice(string baseAddress, InsuranceDto insurance)
         {
             try
             {
@@ -73,12 +76,20 @@ namespace Insurance.Api
 
         }
 
-        public static void CalculateInsuranceValue(ref InsuranceDto insuranceDto, IList<string> typeList)
+        public async Task<ApiResponseModel<InsuranceDto>> CalculateInsuranceValue(InsuranceDto insurance, IList<string> typeList)
         {
-            insuranceDto.InsuranceValue += CheckSalesPrice(insuranceDto.SalesPrice);
-            insuranceDto.InsuranceValue += CheckProductType(insuranceDto.ProductTypeName, typeList);
-            insuranceDto.InsuranceValue *= CheckSurchargeRate(insuranceDto.ProductTypeName);
+            insurance.InsuranceValue += CheckSalesPrice(insurance.SalesPrice);
+            insurance.InsuranceValue += CheckProductType(insurance.ProductTypeName, typeList);
+            insurance.InsuranceValue *= CheckSurchargeRate(insurance.ProductTypeName);
         }
+        public async Task<ApiResponseModel<InsuranceDto>> AddSurcharge(InsuranceDto insurance)
+        {
+
+            var surchargeRates = BusinessRules.ReadSurchargeFile();
+            surchargeRates = BusinessRules.UpdateLine(surchargeRates, insurance);
+            BusinessRules.WriteSurchargeFile(surchargeRates);
+        }
+
 
         private static float CheckSurchargeRate(string ProductTypeName)
         {
@@ -86,7 +97,7 @@ namespace Insurance.Api
             {
                 var surchargeRates = ReadSurchargeFile();
                 float surchargeRate = 0f;
-                if(surchargeRates.Any(x=>x.ProductTypeName.Equals(ProductTypeName)))
+                if (surchargeRates.Any(x => x.ProductTypeName.Equals(ProductTypeName)))
                     surchargeRate = surchargeRates.Find(x => x.ProductTypeName.Equals(ProductTypeName)).SurchargeRate;
                 return 1 + (surchargeRate / 100);
             }
@@ -97,7 +108,7 @@ namespace Insurance.Api
             }
         }
 
-        public static List<InsuranceDto> ReadSurchargeFile()
+        private static List<InsuranceDto> ReadSurchargeFile()
         {
             try
             {
@@ -124,13 +135,13 @@ namespace Insurance.Api
                 }
                 return surchargeRates;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error(ex.Message);
                 throw new Exception($"There was an error while reading Surcharge file.");
             }
         }
-        public static void WriteSurchargeFile(List<InsuranceDto> surchargeRates)
+        private static void WriteSurchargeFile(List<InsuranceDto> surchargeRates)
         {
             try
             {
@@ -140,13 +151,19 @@ namespace Insurance.Api
                     csv.WriteRecords(surchargeRates);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Error(ex.Message);
                 throw new Exception($"There was an error while writing Surcharge file.");
             }
         }
-
+        private static List<InsuranceDto> UpdateLine(List<InsuranceDto> surchargeRates, InsuranceDto toInsure)
+        {
+            if(surchargeRates.Any(x => x.ProductTypeName.Equals(toInsure.ProductTypeName)))
+                    surchargeRates.Remove(surchargeRates.Find(x => x.ProductTypeName.Equals(toInsure.ProductTypeName)));
+            surchargeRates.Add(toInsure);
+            return surchargeRates;
+        }
 
         private static float CheckSalesPrice(float salesPrice)
         {
@@ -167,7 +184,7 @@ namespace Insurance.Api
         {
             if (typeList.Any(x => x.Equals(type)))
             {
-                if(type == StaticDataProvider.Laptops)
+                if (type == StaticDataProvider.Laptops)
                     return StaticDataProvider.LaptopsAdditionalInsuranceValue;
 
                 if (type == StaticDataProvider.SmartPhones)
