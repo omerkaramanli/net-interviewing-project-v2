@@ -1,3 +1,3 @@
 ProductId,InsuranceValue,ProductTypeName,ProductTypeHasInsurance,SalesPrice,SurchargeRate
-861866,0,,False,0,10
 8618665,0,,False,0,10
+861866,0,Laptops,True,0,10

@@ -3,7 +3,6 @@
     public enum ApiResponseState
     {
         Success = 10,
-        Error = 20,
-        Notfound = 30
+        Error = 20
     }
 }

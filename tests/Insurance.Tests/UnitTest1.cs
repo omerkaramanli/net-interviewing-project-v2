@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Insurance.Api.Controllers;
 using Insurance.Api.Dtos;
+using Insurance.Api.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -74,8 +75,8 @@ namespace Insurance.Tests
 
             var dto = new InsuranceDto
             {
-                ProductId = 13, 
-                
+                ProductId = 13,
+
             };
 
             //Act
@@ -163,7 +164,7 @@ namespace Insurance.Tests
 
             var dto = new InsuranceDto
             {
-                ProductId = 2, 
+                ProductId = 2,
             };
 
             //Act
@@ -286,7 +287,7 @@ namespace Insurance.Tests
                 actual: result.Result
                 );
         }
-              
+
         [Fact]
         public void CalculateInsurance_GivenSalesPriceBelow500EurosOrder_ShouldRequireNoInsurance()
         {
@@ -458,28 +459,28 @@ namespace Insurance.Tests
 
             var dto = new List<InsuranceDto>();
 
-            dto.Add(new InsuranceDto { ProductId = 1  }); //0
+            dto.Add(new InsuranceDto { ProductId = 1 }); //0
             dto.Add(new InsuranceDto { ProductId = 12 }); //1000
             dto.Add(new InsuranceDto { ProductId = 13 }); //2000
-            dto.Add(new InsuranceDto { ProductId = 2  }); //0
+            dto.Add(new InsuranceDto { ProductId = 2 }); //0
             dto.Add(new InsuranceDto { ProductId = 22 }); //0
             dto.Add(new InsuranceDto { ProductId = 23 }); //0
-            dto.Add(new InsuranceDto { ProductId = 3  }); //500
+            dto.Add(new InsuranceDto { ProductId = 3 }); //500
             dto.Add(new InsuranceDto { ProductId = 32 }); //1500
             dto.Add(new InsuranceDto { ProductId = 33 }); //2500
-            dto.Add(new InsuranceDto { ProductId = 4  }); //0
+            dto.Add(new InsuranceDto { ProductId = 4 }); //0
             dto.Add(new InsuranceDto { ProductId = 42 }); //0
             dto.Add(new InsuranceDto { ProductId = 43 }); //0
-            dto.Add(new InsuranceDto { ProductId = 5  }); //500
+            dto.Add(new InsuranceDto { ProductId = 5 }); //500
             dto.Add(new InsuranceDto { ProductId = 52 }); //1500
             dto.Add(new InsuranceDto { ProductId = 53 }); //2500
-            dto.Add(new InsuranceDto { ProductId = 6  }); //0
+            dto.Add(new InsuranceDto { ProductId = 6 }); //0
             dto.Add(new InsuranceDto { ProductId = 62 }); //0
             dto.Add(new InsuranceDto { ProductId = 63 }); //0
-            dto.Add(new InsuranceDto { ProductId = 7  }); //0    + 500
+            dto.Add(new InsuranceDto { ProductId = 7 }); //0    + 500
             dto.Add(new InsuranceDto { ProductId = 72 }); //1000 
             dto.Add(new InsuranceDto { ProductId = 73 }); //2000 
-            dto.Add(new InsuranceDto { ProductId = 8  }); //0
+            dto.Add(new InsuranceDto { ProductId = 8 }); //0
             dto.Add(new InsuranceDto { ProductId = 82 }); //0
             dto.Add(new InsuranceDto { ProductId = 83 }); //0
 
@@ -607,7 +608,7 @@ namespace Insurance.Tests
         }
 
         [Fact]
-        public async void CalculateInsurance_GivenSurcharge10PercentForGivenSalesPriceBetween500And2000Euros_ShouldAdd1000EurosToInsuranceCostAsync()
+        public async void CalculateInsurance_GivenSurcharge10PercentForGivenSalesPriceBetween500And2000Euros_ShouldAdd1100EurosToInsuranceCostAsync()
         {
             //Arrange
             const float expectedInsuranceValue = 1100;
@@ -631,7 +632,7 @@ namespace Insurance.Tests
         }
 
         [Fact]
-        public async void CalculateInsurance_GivenSurcharge10PercentForGivenSalesPriceAbove2000Euros_ShouldAdd2000EurosToInsuranceCost()
+        public async void CalculateInsurance_GivenSurcharge10PercentForGivenSalesPriceAbove2000Euros_ShouldAdd2200EurosToInsuranceCost()
         {
             //Arrange
             const float expectedInsuranceValue = 2200;
@@ -653,42 +654,214 @@ namespace Insurance.Tests
                 actual: result.Result
                 );
         }
-    }
 
-    public class ControllerTestFixture : IDisposable
-    {
-        private readonly IHost _host;
 
-        public ControllerTestFixture()
+        [Fact]
+        public async void CalculateInsurance_GivenSurchargeMinus10PercentForGivenSalesPricePriceBelow500Euros_ShouldRequireNoInsuranceAsync()
         {
-            _host = new HostBuilder()
-                   .ConfigureWebHostDefaults(
-                        b => b.UseUrls("http://localhost:5002")
-                              .UseStartup<ControllerTestStartup>()
-                    )
-                   .Build();
+            //Arrange
+            const float expectedInsuranceValue = 0;
 
-            _host.Start();
+            var dto = new InsuranceDto
+            {
+                ProductId = 9,
+                SurchargeRate = -10
+            };
+
+            //Act
+            var sut = new HomeController();
+            await sut.AddSurcharge(dto);
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: expectedInsuranceValue,
+                actual: result.Result
+                );
+        }
+        [Fact]
+        public async void CalculateInsurance_GivenSurchargeMinus10PercentForGivenSalesPriceBetween500And2000Euros_ShouldAdd900EurosToInsuranceCostAsync()
+        {
+            //Arrange
+            const float expectedInsuranceValue = 900;
+
+            var dto = new InsuranceDto
+            {
+                ProductId = 92,
+                SurchargeRate = -10
+            };
+
+            //Act
+            var sut = new HomeController();
+            await sut.AddSurcharge(dto);
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: expectedInsuranceValue,
+                actual: result.Result
+                );
         }
 
-        public void Dispose() => _host.Dispose();
+        [Fact]
+        public async void CalculateInsurance_GivenSurchargeMinus10PercentForGivenSalesPriceAbove2000Euros_ShouldAdd1800EurosToInsuranceCost()
+        {
+            //Arrange
+            const float expectedInsuranceValue = 1800;
+
+            var dto = new InsuranceDto
+            {
+                ProductId = 93,
+                SurchargeRate = -10
+            };
+
+            //Act
+            var sut = new HomeController();
+            await sut.AddSurcharge(dto);
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: expectedInsuranceValue,
+                actual: result.Result
+                );
+        }
+
+        [Fact]
+        public async void CalculateInsurance_GivenSurchargeBelowMinus100PercentForGivenSalesPriceBetween500And2000Euros_ShouldReturnError()
+        {
+            //Arrange
+            const ApiResponseState StateCode = ApiResponseState.Error;
+            const ApiErrorCodeEnum ErrorCode = ApiErrorCodeEnum.ModelNotValid;
+
+            var dto = new InsuranceDto
+            {
+                ProductId = 92,
+                SurchargeRate = -105
+            };
+
+            //Act
+            var sut = new HomeController();
+            var result = await sut.AddSurcharge(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: ErrorCode,
+                actual: result.ErrorCode
+                );
+        }
+
+        [Fact]
+        public async void CalculateInsurance_GivenSurchargeAbove100PercentForGivenSalesPriceAbove2000Euros_ShouldReturnError()
+        {
+            //Arrange
+            const ApiResponseState StateCode = ApiResponseState.Error;
+            const ApiErrorCodeEnum ErrorCode = ApiErrorCodeEnum.ModelNotValid;
+
+            var dto = new InsuranceDto
+            {
+                ProductId = 93,
+                SurchargeRate = 105
+            };
+
+            //Act
+            var sut = new HomeController();
+            var result = await sut.AddSurcharge(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: ErrorCode,
+                actual: result.ErrorCode
+                );
+        }
+        [Fact]
+        public async void CalculateInsurance_GivenInvalidProductId_ShouldReturnError()
+        {
+            //Arrange
+            const ApiResponseState StateCode = ApiResponseState.Error;
+            const ApiErrorCodeEnum ErrorCode = ApiErrorCodeEnum.ProductNotFound;
+
+            var dto = new InsuranceDto
+            {
+                ProductId = 103,
+            };
+
+            //Act
+            var sut = new HomeController();
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: ErrorCode,
+                actual: result.ErrorCode
+                );
+        }
+        [Fact]
+        public async void CalculateSurcharge_GivenInvalidProductId_ShouldReturnError()
+        {
+            //Arrange
+            const ApiResponseState StateCode = ApiResponseState.Error;
+            const ApiErrorCodeEnum ErrorCode = ApiErrorCodeEnum.ProductNotFound;
+
+            var dto = new InsuranceDto
+            {
+                ProductId = 103,
+                SurchargeRate = 10
+            };
+
+            //Act
+            var sut = new HomeController();
+            await sut.AddSurcharge(dto);
+            var result = sut.CalculateInsurance(dto);
+
+            //Assert
+            Assert.Equal(
+                expected: ErrorCode,
+                actual: result.ErrorCode
+                );
+        }
+
     }
 
-    public class ControllerTestStartup
+
+}
+
+
+
+public class ControllerTestFixture : IDisposable
+{
+    private readonly IHost _host;
+
+    public ControllerTestFixture()
     {
-        public void Configure(IApplicationBuilder app)
-        {
-            app.UseRouting();
-            app.UseEndpoints(
-                ep =>
-                {
-                    ep.MapGet(
-                        "products/{id:int}",
-                        context =>
-                        {
-                            int productId = int.Parse((string)context.Request.RouteValues["id"]);
-                            var products = new[]
-                                              {
+        _host = new HostBuilder()
+               .ConfigureWebHostDefaults(
+                    b => b.UseUrls("http://localhost:5002")
+                          .UseStartup<ControllerTestStartup>()
+                )
+               .Build();
+
+        _host.Start();
+    }
+
+    public void Dispose() => _host.Dispose();
+}
+
+public class ControllerTestStartup
+{
+    public void Configure(IApplicationBuilder app)
+    {
+        app.UseRouting();
+        app.UseEndpoints(
+            ep =>
+            {
+                ep.MapGet(
+                    "products/{id:int}",
+                    context =>
+                    {
+                        int productId = int.Parse((string)context.Request.RouteValues["id"]);
+                        var products = new[]
+                                          {
                                 new
                                 {
                                     id = 9,
@@ -878,26 +1051,26 @@ namespace Insurance.Tests
                                         productTypeId = 8,
                                         salesPrice = 2250
                                 },
-                            };
+                        };
 
-                            for (int i = 0; i < products.Length; i++)
-                            {
-                                if (products[i].id == productId)
-                                {
-                                    return context.Response.WriteAsync(JsonConvert.SerializeObject(products[i]));
-
-                                }
-                            }
-
-                            return context.Response.WriteAsync(JsonConvert.SerializeObject("Not found"));
-                        }
-                    );
-                    ep.MapGet(
-                        "products",
-                        context =>
+                        for (int i = 0; i < products.Length; i++)
                         {
-                            var products = new[]
-                                               {
+                            if (products[i].id == productId)
+                            {
+                                return context.Response.WriteAsync(JsonConvert.SerializeObject(products[i]));
+
+                            }
+                        }
+
+                        return context.Response.WriteAsync(JsonConvert.SerializeObject("Not found"));
+                    }
+                );
+                ep.MapGet(
+                    "products",
+                    context =>
+                    {
+                        var products = new[]
+                                           {
                                 new
                                 {
                                     id = 1,
@@ -1066,17 +1239,17 @@ namespace Insurance.Tests
                                         productTypeId = 8,
                                         salesPrice = 2250
                                 },
-                            };
-                            return context.Response.WriteAsync(JsonConvert.SerializeObject(products));
-                        }
-                    );
-                    ep.MapGet(
-                        "product_types/{id:int}",
-                        context =>
-                        {
-                            int productId = int.Parse((string)context.Request.RouteValues["id"]);
-                            var productTypes = new[]
-                                               {
+                        };
+                        return context.Response.WriteAsync(JsonConvert.SerializeObject(products));
+                    }
+                );
+                ep.MapGet(
+                    "product_types/{id:int}",
+                    context =>
+                    {
+                        int productId = int.Parse((string)context.Request.RouteValues["id"]);
+                        var productTypes = new[]
+                                           {
                             new
                             {
                                 id = 1,
@@ -1125,25 +1298,25 @@ namespace Insurance.Tests
                                 name = "Digital cameras",
                                 canBeInsured = false
                             },
-                        };
-                            for (int i = 0; i < productTypes.Length; i++)
+                    };
+                        for (int i = 0; i < productTypes.Length; i++)
+                        {
+                            if (productTypes[i].id == productId)
                             {
-                                if (productTypes[i].id == productId)
-                                {
-                                    return context.Response.WriteAsync(JsonConvert.SerializeObject(productTypes[i]));
+                                return context.Response.WriteAsync(JsonConvert.SerializeObject(productTypes[i]));
 
-                                }
                             }
-
-                            return context.Response.WriteAsync(JsonConvert.SerializeObject("Not found"));
                         }
-                    );
-                    ep.MapGet(
-                        "product_types",
-                        context =>
-                        {
-                            var productTypes = new[]
-                                               {
+
+                        return context.Response.WriteAsync(JsonConvert.SerializeObject("Not found"));
+                    }
+                );
+                ep.MapGet(
+                    "product_types",
+                    context =>
+                    {
+                        var productTypes = new[]
+                                           {
                             new
                             {
                                 id = 1,
@@ -1192,13 +1365,12 @@ namespace Insurance.Tests
                                 name = "Digital cameras",
                                 canBeInsured = false
                             },
-                        };
-                            return context.Response.WriteAsync(JsonConvert.SerializeObject(productTypes));
-                        }
-                    );
+                    };
+                        return context.Response.WriteAsync(JsonConvert.SerializeObject(productTypes));
+                    }
+                );
 
-                }
-            );
-        }
+            }
+        );
     }
 }

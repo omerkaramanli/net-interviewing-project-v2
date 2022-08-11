@@ -108,6 +108,9 @@ namespace Insurance.Api.Controllers
             try
             {
                 var ProductApi = _config.GetValue<string>("ProductApi"); 
+                if (toInsure.SurchargeRate > 100 || toInsure.SurchargeRate < -100)
+                    return new ApiResponseModel(ApiResponseState.Error, "Invalid Surcharge rate", ApiErrorCodeEnum.ModelNotValid);
+
                 BusinessRules.GetProductType(ProductApi, ref toInsure);
                 var surchargeRates = BusinessRules.ReadSurchargeFile();
                 if (surchargeRates.Any(x => x.ProductId == toInsure.ProductId))
